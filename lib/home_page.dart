@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'reusable_card.dart';
 import 'styles.dart';
+import 'groups_page.dart';
+import 'settings_page.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -16,15 +18,18 @@ class _HomepageState extends State<Homepage> {
         leadingWidth: 60,
         title: Text('Quickview'),
         actions: [
-          IconButton(
-            onPressed: () {},
+          PopupMenuButton(
             icon: Icon(Icons.notifications),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 1,
+                child: Text('No new notifications'),
+              )
+            ],
           )
         ],
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
             child: Container(
@@ -39,7 +44,7 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
           Expanded(
-            flex: 5,
+            flex: 7,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -84,8 +89,58 @@ class _HomepageState extends State<Homepage> {
                 ),
               ],
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Expanded(
+                child: BottomButton(
+                  buttonIcon: Icon(Icons.people),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/groups');
+                  },
+                ),
+              ),
+              Expanded(
+                child: BottomButton(
+                  buttonIcon: Icon(Icons.home),
+                ),
+              ),
+              Expanded(
+                child: BottomButton(
+                  buttonIcon: Icon(Icons.settings),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/settings');
+                  },
+                ),
+              ),
+            ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class BottomButton extends StatelessWidget {
+  BottomButton({required this.buttonIcon, this.onTap});
+
+  final VoidCallback? onTap;
+  final Icon buttonIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        child: Center(
+          child: buttonIcon,
+        ),
+        color: Color(0xFF8ecae6),
+        margin: EdgeInsets.only(top: 10.0),
+        padding: EdgeInsets.only(bottom: 20.0),
+        width: double.infinity,
+        height: 80.0,
       ),
     );
   }
