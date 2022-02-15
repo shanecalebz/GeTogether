@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'groups_page.dart';
+import 'settings_page.dart';
 
 void main() => runApp(GeTogether());
 
@@ -29,6 +31,12 @@ class GeTogether extends StatelessWidget {
       ),
       home: Homepage(),
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/home': (context) => Homepage(),
+        '/groups': (context) => GroupsPage(),
+        '/settings': (context) => SettingsPage(),
+      },
     );
   }
 }
