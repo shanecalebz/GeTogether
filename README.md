@@ -15,7 +15,7 @@ To start of, will need to clone the remote repository into your local machine:  
 ### Setting up your git profile
 **IMPT:** Need to setup your name and email to track the changes you make. \
 ```
-$ git config --global user.name "John Doe"``
+$ git config --global user.name "John Doe"
 $ git config --global user.email johndoe@example.com
 ```
 ### Push & Pull
