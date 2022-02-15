@@ -24,7 +24,7 @@ class GeTogether extends StatelessWidget {
             brightness: Brightness.light),
         scaffoldBackgroundColor: Color(0xFFE9D8A6),
         textTheme: TextTheme(
-          bodyText2: TextStyle(color: Color(0xFFFFFFFF)),
+          bodyText2: TextStyle(color: Colors.black),
         ),
       ),
       home: Homepage(),
