@@ -95,7 +95,10 @@ class _HomepageState extends State<Homepage> {
             children: <Widget>[
               Expanded(
                 child: BottomButton(
-                  buttonIcon: Icon(Icons.people),
+                  buttonIcon: Icon(
+                    Icons.people,
+                    size: 30.0,
+                  ),
                   onTap: () {
                     Navigator.pushNamed(context, '/groups');
                   },
@@ -103,12 +106,18 @@ class _HomepageState extends State<Homepage> {
               ),
               Expanded(
                 child: BottomButton(
-                  buttonIcon: Icon(Icons.home),
+                  buttonIcon: Icon(
+                    Icons.home,
+                    size: 30.0,
+                  ),
                 ),
               ),
               Expanded(
                 child: BottomButton(
-                  buttonIcon: Icon(Icons.settings),
+                  buttonIcon: Icon(
+                    Icons.settings,
+                    size: 30.0,
+                  ),
                   onTap: () {
                     Navigator.pushNamed(context, '/settings');
                   },
