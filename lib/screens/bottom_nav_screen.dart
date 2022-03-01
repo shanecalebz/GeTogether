@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:getogether/constants.dart';
 import 'screens.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white10,
+        backgroundColor: Palette.primaryColor,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         selectedItemColor: Colors.white,
@@ -36,7 +37,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             .map((key, value) => MapEntry(
                   key,
                   BottomNavigationBarItem(
-                    label: "",
+                    label: '',
                     icon: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 6.0,

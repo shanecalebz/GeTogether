@@ -11,7 +11,7 @@ class GeTogether extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
-        scaffoldBackgroundColor: Colors.white24,
+        scaffoldBackgroundColor: Color(0xFF1B0376),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BottomNavScreen(),
