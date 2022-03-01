@@ -30,13 +30,13 @@ class _SettingsPageState extends State<SettingsPage> {
     title: 'Logout',
     subtitle: '',
     leading: IconWidget(icon: Icons.logout, color: Colors.blueAccent),
-    onTap: () => Utils.showSnackBar(context, 'Clicked Logout'),
+    onTap: () {},
   );
 
   Widget buildDeleteAccount() => SimpleSettingsTile(
     title: 'Logout',
     subtitle: '',
     leading: IconWidget(icon: Icons.delete, color: Colors.pink),
-    onTap: () => Utils.showSnackBar(context, 'Clicked Delete Account'),
+    onTap: () {},
   );
 }
