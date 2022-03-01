@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
-const kSubGroupHeaderStyle = TextStyle(
-  fontSize: 22.0,
-  fontWeight: FontWeight.bold,
-  decoration: TextDecoration.underline,
-);
+class Styles {
+  static const buttonTextStyle = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.w600,
+  );
+  static const chartLabelsTextStyle = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.w600,
+  );
+  static const tabTextStyle = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.w600,
+  );
+}
