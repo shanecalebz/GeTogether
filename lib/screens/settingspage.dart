@@ -21,6 +21,15 @@ class _SettingsPageState extends State<SettingsPage> {
               buildDeleteAccount(),
             ],
           ),
+          const SizedBox(height: 32),
+          SettingsGroup(
+            title: 'FEEDBACK',
+            children: <Widget>[
+              const SizedBox(height: 8),
+              buildReportBug(),
+              buildSendFeedback(),
+            ],
+          ),
         ],
       ),
     ),
@@ -34,9 +43,23 @@ class _SettingsPageState extends State<SettingsPage> {
   );
 
   Widget buildDeleteAccount() => SimpleSettingsTile(
-    title: 'Logout',
+    title: 'Delete Account',
     subtitle: '',
     leading: IconWidget(icon: Icons.delete, color: Colors.pink),
+    onTap: () {},
+  );
+
+  Widget buildReportBug() => SimpleSettingsTile(
+    title: 'Report A Bug',
+    subtitle: '',
+    leading: IconWidget(icon: Icons.bug_report, color: Colors.teal),
+    onTap: () {},
+  );
+
+  Widget buildSendFeedback() => SimpleSettingsTile(
+    title: 'Send Feedback',
+    subtitle: '',
+    leading: IconWidget(icon: Icons.thumb_up, color: Colors.purple),
     onTap: () {},
   );
 }
