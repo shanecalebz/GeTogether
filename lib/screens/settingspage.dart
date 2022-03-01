@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -11,7 +12,12 @@ class _SettingsPageState extends State<SettingsPage> {
     body: SafeArea(
       child: ListView(
         padding: EdgeInsets.all(24.0),
-        children: [],
+        children: [
+          SettingsGroup(
+            title: 'GENERAL',
+            children: <Widget>[],
+          ),
+        ],
       ),
     ),
   );
