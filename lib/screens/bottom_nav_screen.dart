@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'screens.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -10,7 +11,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final List _screens = [
     GroupsPage(),
     HomeScreen(),
-    Scaffold(),
+    SettingsPage(),
     Scaffold(),
     Scaffold(),
   ];
