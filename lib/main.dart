@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:getogether/categories.dart';
 
 void main() => runApp(GeTogether());
 
@@ -32,3 +34,4 @@ class GeTogether extends StatelessWidget {
     );
   }
 }
+
