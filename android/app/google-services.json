@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "791654480519",
+    "project_id": "dip-getogether-shared",
+    "storage_bucket": "dip-getogether-shared.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791654480519:android:b46c868e325c7c4b811622",
+        "android_client_info": {
+          "package_name": "com.example.getogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "791654480519-emaqkd5q14lrkpeo8355ds000kkcjmis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb7tvbPPFN3SGjDLjjIU9aPJWu4gUmlvU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "791654480519-emaqkd5q14lrkpeo8355ds000kkcjmis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
