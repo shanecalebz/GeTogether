@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:getogether/constants.dart';
 import 'package:getogether/widgets/custom_app_bar.dart';
@@ -30,11 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
-            color: Palette.primaryColor,
-            borderRadius:BorderRadius.only(
-              bottomLeft: Radius.circular(40.0),
-              bottomRight: Radius.circular(40.0),
-            ),
+          color: Palette.primaryColor,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(40.0),
+            bottomRight: Radius.circular(40.0),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
