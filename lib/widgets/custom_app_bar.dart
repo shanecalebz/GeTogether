@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:getogether/constants.dart';
+import 'package:getogether/utils/constants.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
+class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -14,14 +14,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
       ),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.notifications_none),
+            icon: const Icon(Icons.notifications_none),
             iconSize: 28.0,
-            onPressed: () {}
-        )
+            onPressed: () {})
       ],
     );
   }
-  
+
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

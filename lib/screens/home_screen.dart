@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getogether/constants.dart';
+import 'package:getogether/utils/constants.dart';
 import 'package:getogether/widgets/custom_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {

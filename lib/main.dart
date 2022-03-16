@@ -1,7 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'screens/bottom_nav_screen.dart';
+import 'package:getogether/LogInScreens/signin_screen.dart';
 
-void main() => runApp(GeTogether());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(GeTogether());
+}
 
 class GeTogether extends StatelessWidget {
   @override
@@ -14,7 +19,7 @@ class GeTogether extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFF1B0376),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: BottomNavScreen(),
+      home: SignInScreen(),
     );
   }
 }

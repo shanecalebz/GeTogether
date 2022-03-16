@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:getogether/constants.dart';
+import 'package:getogether/utils/constants.dart';
 import 'screens.dart';
 
 class BottomNavScreen extends StatefulWidget {
