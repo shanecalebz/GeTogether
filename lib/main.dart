@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:getogether/LogInScreens/signin_screen.dart';
+import 'package:getogether/Authenticate/Autheticate.dart';
+import 'package:getogether/Authenticate/LoginScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,7 @@ class GeTogether extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFF1B0376),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignInScreen(),
+      home: Authenticate(),
     );
   }
 }
