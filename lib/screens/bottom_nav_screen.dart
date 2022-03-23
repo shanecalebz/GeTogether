@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:getogether/utils/constants.dart';
+import '../group_chats/group_chat_screen.dart';
 import 'screens.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -10,7 +11,7 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   final List _screens = [
-    GroupsPage(),
+    GroupChatHomeScreen(),
     HomeScreen(),
     SettingsPage(),
     Scaffold(),
