@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:getogether/screens/profile.dart';
 import 'package:getogether/widgets/icon_widget.dart';
-
 import '../Authenticate/Methods.dart';
+import '../utils/constants.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -12,9 +13,19 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: Palette.primaryColor,
+          title: Text('Settings'),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.search),
+            )
+          ],
+        ),
         body: SafeArea(
           child: ListView(
-            padding: EdgeInsets.all(24.0),
+            padding: EdgeInsets.all(10.0),
             children: [
               SettingsGroup(
                 title: 'GENERAL',
@@ -37,14 +48,19 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       );
 
-  Widget buildLogout() =>
-      IconButton(icon: Icon(Icons.logout), onPressed: () => logOut(context));
+  Widget buildLogout() => SimpleSettingsTile(
+        title: 'Log Out',
+        subtitle: '',
+        leading: IconWidget(icon: Icons.logout_outlined, color: Colors.pink),
+        onTap: () => logOut(context),
+      );
 
   Widget buildDeleteAccount() => SimpleSettingsTile(
-        title: 'Delete Account',
+        title: 'Profile',
         subtitle: '',
-        leading: IconWidget(icon: Icons.delete, color: Colors.pink),
-        onTap: () {},
+        leading: IconWidget(icon: Icons.person_outline, color: Colors.pink),
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => ProfileView())),
       );
 
   Widget buildReportBug() => SimpleSettingsTile(

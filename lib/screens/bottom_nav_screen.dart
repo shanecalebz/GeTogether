@@ -14,8 +14,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     GroupChatHomeScreen(),
     HomeScreen(),
     SettingsPage(),
-    Scaffold(),
-    Scaffold(),
   ];
   int _currentIndex = 0;
 
