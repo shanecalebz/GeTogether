@@ -1,5 +1,6 @@
 import 'package:chat_app/Authenticate/CreateAccount.dart';
 import 'package:chat_app/Screens/HomeScreen.dart';
+import 'package:chat_app/group_chats/group_chat_screen.dart';
 import 'package:chat_app/Authenticate/Methods.dart';
 import 'package:flutter/material.dart';
 
@@ -118,7 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 isLoading = false;
               });
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                  context, MaterialPageRoute(builder: (_) => GroupChatHomeScreen()));
+                  //context, MaterialPageRoute(builder: (_) => HomeScreen()));
             } else {
               print("Login Failed");
               setState(() {

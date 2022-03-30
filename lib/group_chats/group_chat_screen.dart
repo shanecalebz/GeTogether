@@ -3,6 +3,7 @@ import 'package:chat_app/group_chats/group_chat_room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:chat_app/group_chats/group_features.dart';
 
 class GroupChatHomeScreen extends StatefulWidget {
   const GroupChatHomeScreen({Key? key}) : super(key: key);
@@ -61,9 +62,13 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
                 return ListTile(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => GroupChatRoom(
-                        groupName: groupList[index]['name'],
-                        groupChatId: groupList[index]['id'],
+                       builder: (_) => GroupFeatureScreen(
+
+
+
+                      //builder: (_) => GroupChatRoom(
+                        //groupName: groupList[index]['name'],
+                        //groupChatId: groupList[index]['id'],
                       ),
                     ),
                   ),
