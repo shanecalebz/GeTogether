@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import 'create_group/add_members.dart';
 import 'group_chat_room.dart';
+import 'group_features.dart';
 
 class GroupChatHomeScreen extends StatefulWidget {
   const GroupChatHomeScreen({Key? key}) : super(key: key);
@@ -71,10 +72,13 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
                   return ListTile(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
+                        builder: (_) => GroupFeatureScreen(
+                            /*
                         builder: (_) => GroupChatRoom(
                           groupName: groupList[index]['name'],
                           groupChatId: groupList[index]['id'],
-                        ),
+                          */
+                            ),
                       ),
                     ),
                     leading: Icon(Icons.group),
