@@ -3,7 +3,10 @@ import 'package:getogether/finance/reusable_card.dart';
 import 'package:getogether/finance/constants.dart';
 
 class InputPage extends StatefulWidget {
-  const InputPage({Key? key}) : super(key: key);
+  final String groupChatId, groupName;
+  const InputPage(
+      {required this.groupChatId, required this.groupName, Key? key})
+      : super(key: key);
 
   @override
   State<InputPage> createState() => _InputPageState();

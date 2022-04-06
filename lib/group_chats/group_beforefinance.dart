@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:getogether/finance/custom_input_page.dart';
 import 'group_chat_room.dart';
 
 class GroupBeforeFinanceScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _GroupBeforeFinanceScreenState extends State<GroupBeforeFinanceScreen> {
                 return ListTile(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => GroupChatRoom(
+                      builder: (_) => EqualInput(
                         groupName: groupList[index]['name'],
                         groupChatId: groupList[index]['id'],
                       ),

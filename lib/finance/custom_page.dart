@@ -4,8 +4,14 @@ import 'widgets.dart';
 import 'reusable_card.dart';
 import 'user_data.dart';
 import 'percentage_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomInput extends StatefulWidget {
+  final String groupChatId, groupName;
+  const CustomInput(
+      {required this.groupChatId, required this.groupName, Key? key})
+      : super(key: key);
   static String id = 'custom_page';
 
   @override
@@ -13,6 +19,34 @@ class CustomInput extends StatefulWidget {
 }
 
 class _CustomInputState extends State<CustomInput> {
+  List membersList = [];
+  bool isLoading = true;
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getGroupDetails();
+    _billAmountController.addListener(_onBillAmountChanged);
+    _numberOfPeopleController.addListener(_onNumberOfPeopleChanged);
+  }
+
+  Future getGroupDetails() async {
+    await _firestore
+        .collection('groups')
+        .doc(widget.groupChatId)
+        .get()
+        .then((chatMap) {
+      membersList = chatMap['members'];
+      print(membersList);
+      isLoading = false;
+      setState(() {});
+    });
+  }
+
   final myController = TextEditingController();
   var userData = UserData.getData;
 
@@ -37,13 +71,6 @@ class _CustomInputState extends State<CustomInput> {
   int _numberOfPeople = defaultNumberOfPeople;
 
   _getFinalAmount() => _billAmount / userData.length;
-
-  @override
-  void initState() {
-    super.initState();
-    _billAmountController.addListener(_onBillAmountChanged);
-    _numberOfPeopleController.addListener(_onNumberOfPeopleChanged);
-  }
 
   _onBillAmountChanged() {
     setState(() {

@@ -11,7 +11,10 @@ import 'package:getogether/group_chats/group_info.dart';
 
 class EqualInput extends StatefulWidget {
   static String id = 'equal_page';
-  const EqualInput({Key? key}) : super(key: key);
+  final String groupChatId, groupName;
+  const EqualInput(
+      {required this.groupChatId, required this.groupName, Key? key})
+      : super(key: key);
 
   @override
   State<EqualInput> createState() => _EqualInputState();
@@ -20,6 +23,7 @@ class EqualInput extends StatefulWidget {
 class _EqualInputState extends State<EqualInput> {
   List membersList = [];
   bool isLoading = true;
+  List groupList = [];
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,15 +32,15 @@ class _EqualInputState extends State<EqualInput> {
   void initState() {
     super.initState();
 
-    //getGroupDetails();
+    getGroupDetails();
     _billAmountController.addListener(_onBillAmountChanged);
     _numberOfPeopleController.addListener(_onNumberOfPeopleChanged);
   }
 
-  /*Future getGroupDetails() async {
+  Future getGroupDetails() async {
     await _firestore
         .collection('groups')
-        .doc(widget.groupId)
+        .doc(widget.groupChatId)
         .get()
         .then((chatMap) {
       membersList = chatMap['members'];
@@ -44,7 +48,7 @@ class _EqualInputState extends State<EqualInput> {
       isLoading = false;
       setState(() {});
     });
-  }*/
+  }
 
   final myController = TextEditingController();
   var userData = UserData.getData;
@@ -69,7 +73,7 @@ class _EqualInputState extends State<EqualInput> {
   // This stores the latest value of tip percentage calculated
   int _numberOfPeople = defaultNumberOfPeople;
 
-  _getFinalAmount() => _billAmount / userData.length;
+  _getFinalAmount() => _billAmount / membersList.length;
 
   _onBillAmountChanged() {
     setState(() {
@@ -163,7 +167,7 @@ class _EqualInputState extends State<EqualInput> {
               Expanded(
                 child: ReusableCard(
                   onPress: () {
-                    Navigator.pushNamed(context, CustomInput.id);
+                    Navigator.pushNamed(context, EqualInput.id);
                   },
                   colour: Colors.blueAccent,
                   cardChild: Text(
@@ -195,7 +199,7 @@ class _EqualInputState extends State<EqualInput> {
             ],
           ),
           SizedBox(
-            height: 20.0,
+            height: 5.0,
           ),
           Container(
             child: Expanded(
@@ -203,7 +207,7 @@ class _EqualInputState extends State<EqualInput> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Expanded(
+                  Flexible(
                     child: ListView.builder(
                       itemCount: membersList.length,
                       itemBuilder: (context, index) {
@@ -230,11 +234,12 @@ class _EqualInputState extends State<EqualInput> {
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-                                                  userIcon(userData[index]),
+                                                  //userIcon(userData[index]),
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  userName(userData[index]),
+                                                  Text(membersList[index]
+                                                      ['name']),
                                                   Spacer(),
                                                   Container(
                                                     margin: EdgeInsets.all(15),
