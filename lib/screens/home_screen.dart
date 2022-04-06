@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[
           _buildHeader(screenHeight),
-          _quickLinks(screenHeight),
+          //_quickLinks(screenHeight),
         ],
       ),
     );
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            SizedBox(height: screenHeight * 0.01),
+            /*SizedBox(height: screenHeight * 0.01),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -60,14 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )
               ],
-            )
+            )*/
           ],
         ),
       ),
     );
   }
 
-  SliverToBoxAdapter _quickLinks(double screenHeight) {
+/*SliverToBoxAdapter _quickLinks(double screenHeight) {
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.all(20.0),
@@ -88,4 +88,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}*/
 }
