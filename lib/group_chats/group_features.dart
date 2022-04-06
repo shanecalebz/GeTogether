@@ -54,60 +54,83 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
             height: size.height,
             width: size.width,
             color: Colors.white,
-            child: Column(
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => GroupBeforeChatScreen(),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 100,
+                      width: 350,
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => GroupBeforeChatScreen(),
+                          ),
+                        ),
+                        child: Text('Group Chat'),
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 50),
+                            primary: Colors.white,
+                            backgroundColor: Colors.lightBlueAccent),
+                      ),
                     ),
                   ),
-                  child: Text('Group Chat'),
-                  style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 68),
-                      primary: Colors.white,
-                      backgroundColor: Colors.lightBlueAccent),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                ),
-                TextButton(
-                  onPressed: () {
-                    print('you clicked me');
-                  },
-                  child: Text('Finance'),
-                  style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 68),
-                      primary: Colors.white,
-                      backgroundColor: Colors.lightBlueAccent),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => RandomizerHome()),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 100,
+                      width: 350,
+                      child: TextButton(
+                        onPressed: () {
+                          print('you clicked me');
+                        },
+                        child: Text('Finance'),
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 50),
+                            primary: Colors.white,
+                            backgroundColor: Colors.lightBlueAccent),
+                      ),
+                    ),
                   ),
-                  child: Text('Randomizer'),
-                  style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 68),
-                      primary: Colors.white,
-                      backgroundColor: Colors.lightBlueAccent),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => AddMembersInGroup()),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 100,
+                      width: 350,
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => RandomizerHome()),
+                        ),
+                        child: Text('Randomizer'),
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 50),
+                            primary: Colors.white,
+                            backgroundColor: Colors.lightBlueAccent),
+                      ),
+                    ),
                   ),
-                  child: Text('Create Group'),
-                  style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 68),
-                      primary: Colors.white,
-                      backgroundColor: Colors.lightBlueAccent),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 100,
+                      width: 350,
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => AddMembersInGroup()),
+                        ),
+                        child: Text('Create Group'),
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 50),
+                            primary: Colors.white,
+                            backgroundColor: Colors.lightBlueAccent),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )));
   }
 }
