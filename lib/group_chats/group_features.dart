@@ -5,6 +5,7 @@ import 'package:getogether/group_chats/group_chat_screen.dart';
 import '../Randomizer/randomizer_home.dart';
 import 'create_group/add_members.dart';
 import 'group_beforechat.dart';
+import 'package:getogether/finance/custom_input_page.dart';
 
 class GroupFeatureScreen extends StatefulWidget {
   const GroupFeatureScreen({Key? key}) : super(key: key);
@@ -72,9 +73,11 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                   padding: const EdgeInsets.only(top: 20),
                 ),
                 TextButton(
-                  onPressed: () {
-                    print('you clicked me');
-                  },
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => EqualInput(),
+                    ),
+                  ),
                   child: Text('Finance'),
                   style: TextButton.styleFrom(
                       textStyle: TextStyle(fontSize: 68),
