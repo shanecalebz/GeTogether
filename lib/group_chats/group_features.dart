@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:getogether/group_chats/group_chat_screen.dart';
 import 'package:getogether/qrscanner/qr_scanner.dart';
 import '../Randomizer/randomizer_home.dart';
+import '../qrscanner/calculate_total_price.dart';
 import 'create_group/add_members.dart';
 import 'group_beforechat.dart';
 
@@ -136,10 +137,11 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                       height: 100,
                       width: 350,
                       child: TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) => QRScanner()),
-                        ),
+                        onPressed: () async {
+                          final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => QRScanner()));
+                          if (result != null) {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => CalculateTotalPrice(menu: result)));
+                          }},
                         child: Text('QR + Calculator'),
                         style: TextButton.styleFrom(
                             textStyle: TextStyle(fontSize: 35),
