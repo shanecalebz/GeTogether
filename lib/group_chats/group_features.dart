@@ -78,7 +78,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                 ),
               child: Text('Group Chat'),
               style: TextButton.styleFrom(
-                  textStyle: TextStyle(fontSize: 50),
+                  textStyle: TextStyle(fontSize: 50, fontFamily: 'JosefinSans'),
                   primary: Colors.white,
                   backgroundColor: Colors.deepPurple),
                       ),
@@ -95,7 +95,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                 },
                 child: Text('Finance'),
                 style: TextButton.styleFrom(
-                    textStyle: TextStyle(fontSize: 50),
+                    textStyle: TextStyle(fontSize: 50,fontFamily: 'JosefinSans'),
                     primary: Colors.white,
                     backgroundColor: Colors.deepPurple),
                     ),
