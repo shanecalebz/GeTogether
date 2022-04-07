@@ -6,6 +6,7 @@ import '../Authenticate/Methods.dart';
 import '../utils/constants.dart';
 import '../utils/profile_menu.dart';
 import '../utils/profile_pic.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -20,6 +23,8 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Column(
         children: [
           ProfilePic(),
+          Text("${_auth.currentUser?.displayName}",
+              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)),
           SizedBox(height: 20),
           ProfileMenu(
             text: "My Account",
