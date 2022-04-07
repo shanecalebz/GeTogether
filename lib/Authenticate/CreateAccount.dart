@@ -34,9 +34,12 @@ class _CreateAccountState extends State<CreateAccount> {
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                hexStringToColor("CB2B93"),
+                hexStringToColor("E65100"),
+                hexStringToColor("FB8C00"),
+                hexStringToColor("FFB74D"),
+/*                hexStringToColor("CB2B93"),
                 hexStringToColor("9546C4"),
-                hexStringToColor("5E61F4")
+                hexStringToColor("5E61F4")*/
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
               child: SingleChildScrollView(
                 child: Column(

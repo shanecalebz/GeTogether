@@ -35,9 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                hexStringToColor("CB2B93"),
-                hexStringToColor("9546C4"),
-                hexStringToColor("5E61F4")
+                hexStringToColor("E65100"),
+                hexStringToColor("FB8C00"),
+                hexStringToColor("FFB74D"),
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
               child: SingleChildScrollView(
                 child: Column(
