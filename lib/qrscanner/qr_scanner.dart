@@ -46,6 +46,21 @@ class _QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          }, icon: Icon(Icons.arrow_back),
+        ),
+        leadingWidth: 60,
+        title: Center(child: Text("QR Scanner")),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.settings_ethernet),
+          )
+        ],
+      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
