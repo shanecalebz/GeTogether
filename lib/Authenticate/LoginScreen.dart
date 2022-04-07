@@ -56,8 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             "GeTogether",
                             style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 54,
+                              color: Colors.white,
+                              fontSize: 50,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           logIn(_email.text, _password.text).then((user) {
             if (user != null) {
-              print("Login Sucessfull");
+              print("Login Successful");
               setState(() {
                 isLoading = false;
               });
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
               borderRadius: BorderRadius.circular(90), color: Colors.white),
           alignment: Alignment.center,
           child: Text(
-            "Sign In",
+            "Log In",
             style: const TextStyle(
                 color: Colors.black87,
                 fontWeight: FontWeight.bold,
