@@ -48,7 +48,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("Functions")),
+          title: Center(child: Text("GeTogether")),
           automaticallyImplyLeading: false,
         ),
         body: Container(
