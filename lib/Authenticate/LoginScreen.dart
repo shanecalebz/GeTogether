@@ -49,14 +49,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: size.height / 50,
                     ),
                     Container(
-                      width: size.width / 1.1,
+                      width: size.width,
                       child: Padding(
                         padding: const EdgeInsets.all(30.0),
                         child: Center(
                           child: Text(
                             "GeTogether",
                             style: TextStyle(
-                              fontSize: 60,
+                              color: Colors.black,
+                              fontSize: 54,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

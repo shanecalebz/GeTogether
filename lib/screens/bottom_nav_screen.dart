@@ -45,7 +45,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                       ),
                       decoration: BoxDecoration(
                         color: _currentIndex == key
-                            ? Colors.blue[600]
+                            ? Colors.white70
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(20.0),
                       ),
