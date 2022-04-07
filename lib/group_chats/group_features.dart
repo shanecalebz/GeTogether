@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/group_chats/group_chat_screen.dart';
+import 'package:getogether/qrscanner/qr_scanner.dart';
 import '../Randomizer/randomizer_home.dart';
+import '../qrscanner/calculate_total_price.dart';
 import '../utils/constants.dart';
 import 'create_group/add_members.dart';
 import 'group_beforechat.dart';
@@ -48,7 +50,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Features"),
+          title: Center(child: Text("GeTogether")),
           backgroundColor: Palette.primaryColor,
           automaticallyImplyLeading: false,
         ),
@@ -112,6 +114,11 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                               primary: Colors.white,
                               backgroundColor: Colors.deepPurple),
                         ),
+                        child: Text('Randomizer'),
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 35),
+                            primary: Colors.white,
+                            backgroundColor: Colors.lightBlueAccent),
                       ),
                     ),
                     Padding(
@@ -148,6 +155,30 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                               primary: Colors.white,
                               backgroundColor: Colors.deepPurple),
                         ),
+                        child: Text('Create Group'),
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 35),
+                            primary: Colors.white,
+                            backgroundColor: Colors.lightBlueAccent),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 100,
+                      width: 350,
+                      child: TextButton(
+                        onPressed: () async {
+                          final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => QRScanner()));
+                          if (result != null) {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => CalculateTotalPrice(menu: result)));
+                          }},
+                        child: Text('QR + Calculator'),
+                        style: TextButton.styleFrom(
+                            textStyle: TextStyle(fontSize: 35),
+                            primary: Colors.white,
+                            backgroundColor: Colors.lightBlueAccent),
                       ),
                     ),
                   ],
