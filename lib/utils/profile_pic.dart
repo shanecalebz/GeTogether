@@ -9,7 +9,7 @@ class ProfilePic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 40, 0, 20),
+      padding: const EdgeInsets.fromLTRB(0, 40, 0, 25),
       child: SizedBox(
         height: 115,
         width: 115,

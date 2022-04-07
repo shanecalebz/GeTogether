@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/group_chats/group_chat_screen.dart';
 import '../Randomizer/randomizer_home.dart';
+import '../utils/constants.dart';
 import 'create_group/add_members.dart';
 import 'group_beforechat.dart';
 
@@ -48,89 +49,110 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Features"),
+          backgroundColor: Palette.primaryColor,
           automaticallyImplyLeading: false,
         ),
-        body: Container(
-            height: size.height,
-            width: size.width,
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 100,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => GroupBeforeChatScreen(),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              height: size.height,
+              width: size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: 75,
+                        width: 350,
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => GroupBeforeChatScreen(),
+                            ),
                           ),
+                          child: Text('Group Chat'),
+                          style: TextButton.styleFrom(
+                              textStyle: TextStyle(fontSize: 50),
+                              primary: Colors.white,
+                              backgroundColor: Colors.deepPurple),
                         ),
-                        child: Text('Group Chat'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
-                            primary: Colors.white,
-                            backgroundColor: Colors.lightBlueAccent),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 100,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () {
-                          print('you clicked me');
-                        },
-                        child: Text('Finance'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
-                            primary: Colors.white,
-                            backgroundColor: Colors.lightBlueAccent),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 100,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => RandomizerHome()),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: 75,
+                        width: 350,
+                        child: TextButton(
+                          onPressed: () {
+                            print('you clicked me');
+                          },
+                          child: Text('Finance'),
+                          style: TextButton.styleFrom(
+                              textStyle: TextStyle(fontSize: 50),
+                              primary: Colors.white,
+                              backgroundColor: Colors.deepPurple),
                         ),
-                        child: Text('Randomizer'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
-                            primary: Colors.white,
-                            backgroundColor: Colors.lightBlueAccent),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 100,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) => AddMembersInGroup()),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: 75,
+                        width: 350,
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => RandomizerHome()),
+                          ),
+                          child: Text('Randomizer'),
+                          style: TextButton.styleFrom(
+                              textStyle: TextStyle(fontSize: 50),
+                              primary: Colors.white,
+                              backgroundColor: Colors.deepPurple),
                         ),
-                        child: Text('Create Group'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
-                            primary: Colors.white,
-                            backgroundColor: Colors.lightBlueAccent),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )));
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: 75,
+                        width: 350,
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => AddMembersInGroup()),
+                          ),
+                          child: Text('Create Group'),
+                          style: TextButton.styleFrom(
+                              textStyle: TextStyle(fontSize: 50),
+                              primary: Colors.white,
+                              backgroundColor: Colors.deepPurple),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        height: 75,
+                        width: 350,
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => AddMembersInGroup()),
+                          ),
+                          child: Text('QR Code'),
+                          style: TextButton.styleFrom(
+                              textStyle: TextStyle(fontSize: 40),
+                              primary: Colors.white,
+                              backgroundColor: Colors.deepPurple),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ));
   }
 }
