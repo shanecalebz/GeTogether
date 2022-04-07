@@ -5,6 +5,7 @@ import 'package:getogether/widgets/icon_widget.dart';
 import '../Authenticate/Methods.dart';
 import '../utils/constants.dart';
 import '../utils/profile_menu.dart';
+import '../utils/profile_pic.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
+          ProfilePic(),
           SizedBox(height: 20),
           ProfileMenu(
             text: "My Account",
