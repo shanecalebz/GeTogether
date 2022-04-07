@@ -74,9 +74,12 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           ),
                           child: Text('Group Chat'),
                           style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 50),
-                              primary: Colors.white,
-                              backgroundColor: Colors.deepPurple),
+                            textStyle: TextStyle(fontSize: 40),
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.5)),
+                            backgroundColor: Colors.lightGreenAccent.shade700,
+                          ),
                         ),
                       ),
                     ),
