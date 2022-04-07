@@ -15,13 +15,12 @@ class GeTogether extends StatelessWidget {
     return MaterialApp(
       title: 'GeTogether',
       debugShowCheckedModeBanner: false,
-      /*
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        scaffoldBackgroundColor: Color(0xFF1B0376),
+        //primarySwatch: Colors.deepOrange,
+        //scaffoldBackgroundColor: Color(0xFF1B0376),
+        scaffoldBackgroundColor: Color(0xFFE0E0E0),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      */
       home: Authenticate(),
     );
   }
