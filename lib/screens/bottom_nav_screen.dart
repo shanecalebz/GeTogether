@@ -29,8 +29,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         backgroundColor: Palette.primaryColor,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        selectedItemColor: Colors.cyan,
-        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
         elevation: 0.0,
         items: [Icons.home, Icons.monetization_on_rounded, Icons.settings]
             .asMap()
