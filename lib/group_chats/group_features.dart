@@ -72,7 +72,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                         ),
                         child: Text('Group Chat'),
                         style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
+                            textStyle: TextStyle(fontSize:35),
                             primary: Colors.white,
                             backgroundColor: Colors.lightBlueAccent),
                       ),
@@ -89,7 +89,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                         },
                         child: Text('Finance'),
                         style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
+                            textStyle: TextStyle(fontSize: 35),
                             primary: Colors.white,
                             backgroundColor: Colors.lightBlueAccent),
                       ),
@@ -106,7 +106,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                         ),
                         child: Text('Randomizer'),
                         style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
+                            textStyle: TextStyle(fontSize: 35),
                             primary: Colors.white,
                             backgroundColor: Colors.lightBlueAccent),
                       ),
@@ -124,7 +124,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                         ),
                         child: Text('Create Group'),
                         style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
+                            textStyle: TextStyle(fontSize: 35),
                             primary: Colors.white,
                             backgroundColor: Colors.lightBlueAccent),
                       ),
@@ -142,7 +142,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                         ),
                         child: Text('QR + Calculator'),
                         style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
+                            textStyle: TextStyle(fontSize: 35),
                             primary: Colors.white,
                             backgroundColor: Colors.lightBlueAccent),
                       ),
