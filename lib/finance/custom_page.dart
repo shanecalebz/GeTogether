@@ -88,7 +88,7 @@ class _CustomInputState extends State<CustomInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Custom Input'),
+        title: Text('Custom Input (${widget.groupName})'),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,

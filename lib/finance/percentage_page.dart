@@ -4,15 +4,49 @@ import 'user_data.dart';
 import 'widgets.dart';
 import 'reusable_card.dart';
 import 'custom_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PercentageInput extends StatefulWidget {
   static String id = 'percentage_page';
+  final String groupChatId, groupName;
+  const PercentageInput(
+      {required this.groupChatId, required this.groupName, Key? key})
+      : super(key: key);
 
   @override
   State<PercentageInput> createState() => _PercentageInputState();
 }
 
 class _PercentageInputState extends State<PercentageInput> {
+  List membersList = [];
+  bool isLoading = true;
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getGroupDetails();
+    _billAmountController.addListener(_onBillAmountChanged);
+    _numberOfPeopleController.addListener(_onNumberOfPeopleChanged);
+  }
+
+  Future getGroupDetails() async {
+    await _firestore
+        .collection('groups')
+        .doc(widget.groupChatId)
+        .get()
+        .then((chatMap) {
+      membersList = chatMap['members'];
+      print(membersList);
+      isLoading = false;
+      setState(() {});
+    });
+  }
+
   var userData = UserData.getData;
 
   // This is the default bill amount
@@ -37,13 +71,6 @@ class _PercentageInputState extends State<PercentageInput> {
 
   _getFinalAmount() => _billAmount / userData.length;
 
-  @override
-  void initState() {
-    super.initState();
-    _billAmountController.addListener(_onBillAmountChanged);
-    _numberOfPeopleController.addListener(_onNumberOfPeopleChanged);
-  }
-
   _onBillAmountChanged() {
     setState(() {
       _billAmount = double.tryParse(_billAmountController.text) ?? 0.0;
@@ -60,7 +87,7 @@ class _PercentageInputState extends State<PercentageInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Percentage Input'),
+        title: Text('Percentage Input (${widget.groupName})'),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,

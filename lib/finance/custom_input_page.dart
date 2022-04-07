@@ -91,7 +91,7 @@ class _EqualInputState extends State<EqualInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Equal Input'),
+        title: Text('Equal Input (${widget.groupName})'),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,

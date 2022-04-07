@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/finance/custom_input_page.dart';
 import 'group_chat_room.dart';
+import 'package:getogether/finance/finance_features.dart';
 
 class GroupBeforeFinanceScreen extends StatefulWidget {
   const GroupBeforeFinanceScreen({Key? key}) : super(key: key);
@@ -62,11 +63,10 @@ class _GroupBeforeFinanceScreenState extends State<GroupBeforeFinanceScreen> {
                 return ListTile(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => EqualInput(
-                        groupName: groupList[index]['name'],
-                        groupChatId: groupList[index]['id'],
-                      ),
-                    ),
+                        builder: (_) => FinanceFeatureScreen(
+                              groupName: groupList[index]['name'],
+                              groupChatId: groupList[index]['id'],
+                            )),
                   ),
                   leading: Icon(Icons.group),
                   title: Text(groupList[index]['name']),
