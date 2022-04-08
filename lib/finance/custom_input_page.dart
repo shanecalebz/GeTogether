@@ -288,7 +288,20 @@ class _EqualInputState extends State<EqualInput> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.blueAccent,
         label: Text("Submit"),
-        onPressed: () {},
+        onPressed: () {// CREATE STRING
+          String temp = "";
+          for (int i = 0; i < membersList.length; i++) {
+            if (_auth.currentUser?.uid == membersList[i]['uid']) {
+              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toString() + ",no,yes";
+            } else {
+              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toString() + ",no,no";
+            }
+            if (i != (membersList.length - 1)) {
+              temp += ";";
+            }
+          }
+          // APPEND TO FIRESTORE
+          _firestore.collection('notifications').add({'test': temp});},
         tooltip: "Create Group",
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/utils/constants.dart';
 import 'package:getogether/widgets/custom_app_bar.dart';
@@ -8,16 +9,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<String> userList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userList.clear();
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    _firestore.collection('notifications').get().then((value) => value.docs.forEach((element) {for (String users in element.data()['test'].split(';')) {
+      setState(() {
+        userList.add(users);
+      });
+    }}));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return Scaffold(
       appBar: CustomAppBar(),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[
           _buildHeader(screenHeight),
-          _quickLinks(screenHeight),
+          SliverToBoxAdapter(
+            child: Container(
+              child: Column(
+                children: [
+                  for (int i = 0; i < userList.length; i++)
+                    if (userList[i].split(',')[4] == "yes")
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("People Owe:"),
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                  Text(userList[i].split(',')[1]),
+                                  Text("\$" + userList[i].split(',')[2]),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    else
+                      Container(),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -61,28 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             )
-          ],
-        ),
-      ),
-    );
-  }
-
-  SliverToBoxAdapter _quickLinks(double screenHeight) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: const EdgeInsets.all(20.0),
-        color: Colors.greenAccent,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Quick Links',
-              style: const TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 20.0),
           ],
         ),
       ),
