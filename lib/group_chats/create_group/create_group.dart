@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/group_chats/Chat_Screens/UserSearchScreen.dart';
+import 'package:getogether/screens/bottom_nav_screen.dart';
+import 'package:getogether/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateGroup extends StatefulWidget {
@@ -51,8 +53,7 @@ class _CreateGroupState extends State<CreateGroup> {
     });
 
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => UserSearchScreen()),
-        (route) => false);
+        MaterialPageRoute(builder: (_) => BottomNavScreen()), (route) => false);
   }
 
   @override
@@ -62,6 +63,7 @@ class _CreateGroupState extends State<CreateGroup> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Group Name"),
+        backgroundColor: Palette.primaryColor,
       ),
       body: isLoading
           ? Container(
@@ -98,6 +100,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 ),
                 ElevatedButton(
                   onPressed: createGroup,
+                  style: ElevatedButton.styleFrom(primary: Colors.orange),
                   child: Text("Create Group"),
                 ),
               ],

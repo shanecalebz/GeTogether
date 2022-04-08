@@ -97,6 +97,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange,
         title: Text("Add Members"),
       ),
       body: SingleChildScrollView(
@@ -151,6 +152,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
                     child: CircularProgressIndicator(),
                   )
                 : ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.orange),
                     onPressed: onSearch,
                     child: Text("Search"),
                   ),
@@ -168,6 +170,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       ),
       floatingActionButton: membersList.length >= 2
           ? FloatingActionButton(
+              backgroundColor: Colors.orange,
               child: Icon(Icons.forward),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
