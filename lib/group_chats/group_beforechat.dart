@@ -45,6 +45,7 @@ class _GroupBeforeChatScreenState extends State<GroupBeforeChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange,
         title: Text("Select Group Chat"),
       ),
       body: isLoading
@@ -57,17 +58,22 @@ class _GroupBeforeChatScreenState extends State<GroupBeforeChatScreen> {
           : ListView.builder(
               itemCount: groupList.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => GroupChatRoom(
-                        groupName: groupList[index]['name'],
-                        groupChatId: groupList[index]['id'],
+                return Container(
+                  child: ListTile(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => GroupChatRoom(
+                          groupName: groupList[index]['name'],
+                          groupChatId: groupList[index]['id'],
+                        ),
                       ),
                     ),
+                    leading: Icon(Icons.group),
+                    title: Text(groupList[index]['name']),
                   ),
-                  leading: Icon(Icons.group),
-                  title: Text(groupList[index]['name']),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade100, width: 2),
+                      borderRadius: BorderRadius.circular(10)),
                 );
               },
             ),

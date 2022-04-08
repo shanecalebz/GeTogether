@@ -18,7 +18,9 @@ class GeTogether extends StatelessWidget {
       theme: ThemeData(
         //primarySwatch: Colors.deepOrange,
         //scaffoldBackgroundColor: Color(0xFF1B0376),
-        scaffoldBackgroundColor: Color(0xFFE0E0E0),
+        //scaffoldBackgroundColor: Color(0xFFE0E0E0),
+        scaffoldBackgroundColor: Colors.white,
+
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Authenticate(),

@@ -48,9 +48,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery
-        .of(context)
-        .size;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
         appBar: AppBar(
@@ -112,61 +110,80 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                       width: 350,
                       child: TextButton(
                         onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => RandomizerHome()),
+                          MaterialPageRoute(builder: (_) => RandomizerHome()),),
+                            child: Text('Randomizer'),
+                            style: TextButton.styleFrom(
+                              textStyle: TextStyle(
+                                  fontSize: 50,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold),
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              backgroundColor: Color(0xFFF5F6F9),
+                            ),
+                          ),
                         ),
-                        child: Text('Randomizer'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
-                            primary: Colors.white,
-                            backgroundColor: Colors.deepPurple),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 75,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) => AddMembersInGroup()),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SizedBox(
+                          height: 75,
+                          width: 350,
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (_) => AddMembersInGroup()),
+                            ),
+                            child: Text('Create Group'),
+                            style: TextButton.styleFrom(
+                              textStyle: TextStyle(
+                                  fontSize: 50,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold),
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              backgroundColor: Color(0xFFF5F6F9),
+                            ),
+                          ),
                         ),
-                        child: Text('Create Group'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 50),
-                            primary: Colors.white,
-                            backgroundColor: Colors.deepPurple),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 75,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () async {
-                          final result = await Navigator.push(
-                              context, MaterialPageRoute(builder: (_) =>
-                              QRScanner()));
-                          if (result != null) {
-                            Navigator.push(context, MaterialPageRoute(builder: (
-                                _) => CalculateTotalPrice(menu: result)));
-                          }
-                        },
-                        child: Text('QR + Calculator'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 40),
-                            primary: Colors.white,
-                            backgroundColor: Colors.deepPurple),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SizedBox(
+                          height: 75,
+                          width: 350,
+                          child: TextButton(
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => QRScanner()));
+                              if (result != null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            CalculateTotalPrice(menu: result)));
+                              }
+                            },
+                            child: Text('QR + Calculator'),
+                            style: TextButton.styleFrom(
+                              textStyle: TextStyle(
+                                  fontSize: 40,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold),
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              backgroundColor: Color(0xFFF5F6F9),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            )
-        )
-    ));
+                ))));
   }
 }

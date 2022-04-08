@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/utils/constants.dart';
 import 'package:getogether/widgets/custom_app_bar.dart';
@@ -8,16 +9,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  List<String> userList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userList.clear();
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    _firestore.collection('notifications').get().then((value) => value.docs.forEach((element) {
+      for (String users in element.data()['test'].split(';')) {
+        setState(() {
+          userList.add(users);
+        });
+      }}));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return Scaffold(
       appBar: CustomAppBar(),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[
           _buildHeader(screenHeight),
-          //_quickLinks(screenHeight),
+          SliverToBoxAdapter(
+            child:Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+              ),
+              child: Column(
+                children: [
+                  for (int j = 0; j < userList.length; j++)
+                    if (userList[j].split(',')[4] != "yes")
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(userList[j].split(',')[1]),
+                                Text("owes you"),
+                                Text("\$" + userList[j].split(',')[2]),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      Container(),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -49,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            /*SizedBox(height: screenHeight * 0.01),
+            SizedBox(height: screenHeight * 0.01),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -60,33 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )
               ],
-            )*/
+            )
           ],
         ),
       ),
     );
   }
-
-/*SliverToBoxAdapter _quickLinks(double screenHeight) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: const EdgeInsets.all(20.0),
-        color: Colors.greenAccent,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Quick Links',
-              style: const TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 20.0),
-          ],
-        ),
-      ),
-    );
-  }
-}*/
 }
