@@ -9,6 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   List<String> userList = [];
 
   @override
@@ -17,10 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     userList.clear();
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    _firestore.collection('notifications').get().then((value) => value.docs.forEach((element) {for (String users in element.data()['test'].split(';')) {
-      setState(() {
-        userList.add(users);
-      });
+    _firestore.collection('notifications').get().then((value) => value.docs.forEach((element) {
+        for (String users in element.data()['test'].split(';')) {
+          setState(() {
+            userList.add(users);
+          });
     }}));
   }
 
@@ -37,31 +39,29 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: <Widget>[
           _buildHeader(screenHeight),
           SliverToBoxAdapter(
-            child: Container(
+            child:Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+              ),
               child: Column(
                 children: [
-                  for (int i = 0; i < userList.length; i++)
-                    if (userList[i].split(',')[4] == "yes")
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("People Owe:"),
-                              Row(
+                  for (int j = 0; j < userList.length; j++)
+                    if (userList[j].split(',')[4] != "yes")
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                  Text(userList[i].split(',')[1]),
-                                  Text("\$" + userList[i].split(',')[2]),
-                                ],
-                              ),
-                            ],
-                          ),
+                                Text(userList[j].split(',')[1]),
+                                Text("owes you"),
+                                Text("\$" + userList[j].split(',')[2]),
+                              ],
+                            ),
+                          ],
                         ),
                       )
                     else
