@@ -14,7 +14,10 @@ class FinanceFeatureScreen extends StatefulWidget {
   final String groupChatId, groupName;
   final Function goToNotifications;
   const FinanceFeatureScreen(
-      {required this.groupChatId, required this.groupName, required this.goToNotifications, Key? key})
+      {required this.groupChatId,
+      required this.groupName,
+      required this.goToNotifications,
+      Key? key})
       : super(key: key);
 
   @override
@@ -89,6 +92,7 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                       builder: (_) => CustomInput(
                         groupName: widget.groupName,
                         groupChatId: widget.groupChatId,
+                        goToNotifications: widget.goToNotifications,
                       ),
                     ),
                   ),
