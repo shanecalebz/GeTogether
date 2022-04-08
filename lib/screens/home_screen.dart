@@ -32,45 +32,57 @@ class _HomeScreenState extends State<HomeScreen> {
         .of(context)
         .size
         .height;
-    return Scaffold(
-      appBar: CustomAppBar(),
-      body: CustomScrollView(
-        physics: ClampingScrollPhysics(),
-        slivers: <Widget>[
-          _buildHeader(screenHeight),
-          SliverToBoxAdapter(
-            child:Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0XFFFEA828),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: "You Owe"),
+              Tab(text: "They Owe"),
+            ]
+          ),
+          title: Text("GeTogether"),
+        ),
+        body: CustomScrollView(
+          physics: ClampingScrollPhysics(),
+          slivers: <Widget>[
+            _buildHeader(screenHeight),
+            SliverToBoxAdapter(
+              child:Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                ),
+                child: Column(
+                  children: [
+                    for (int j = 0; j < userList.length; j++)
+                      if (userList[j].split(',')[4] != "yes")
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(userList[j].split(',')[1]),
+                                  Text("owes you"),
+                                  Text("\$" + userList[j].split(',')[2]),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        Container(),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  for (int j = 0; j < userList.length; j++)
-                    if (userList[j].split(',')[4] != "yes")
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(userList[j].split(',')[1]),
-                                Text("owes you"),
-                                Text("\$" + userList[j].split(',')[2]),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    else
-                      Container(),
-                ],
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -42,12 +42,18 @@ class _CustomInputState extends State<CustomInput> {
         .then((chatMap) {
       membersList = chatMap['members'];
       print(membersList);
+
+      for (int i = 0; i < membersList.length; i++) {
+        TextEditingController controller = TextEditingController();
+        myControllers.add(controller);
+      }
+
       isLoading = false;
       setState(() {});
     });
   }
 
-  final myController = TextEditingController();
+  List<TextEditingController> myControllers = [];
   var userData = UserData.getData;
 
   // This is the default bill amount
@@ -243,7 +249,7 @@ class _CustomInputState extends State<CustomInput> {
                                                     width: 50,
                                                     height: 50,
                                                     child: TextField(
-                                                      controller: myController,
+                                                      controller: myControllers[index],
                                                     ),
                                                   )
                                                 ],
@@ -272,6 +278,10 @@ class _CustomInputState extends State<CustomInput> {
         backgroundColor: Colors.blueAccent,
         label: Text("Submit"),
         onPressed: () {
+          for (int i = 0; i < myControllers.length; i++) {
+            print(membersList[i]['name'] + " entered value is " + myControllers[i].text);
+          }
+          /*
           showDialog(
               context: context,
               builder: (context) {
@@ -279,6 +289,7 @@ class _CustomInputState extends State<CustomInput> {
                   content: Text(myController.text),
                 );
               });
+           */
         },
         tooltip: "Create Group",
       ),
@@ -291,7 +302,9 @@ class _CustomInputState extends State<CustomInput> {
     // when this widget is cleared from the memory.
     _billAmountController.dispose();
     _numberOfPeopleController.dispose();
-    myController.dispose();
+    for (int i = 0; i < myControllers.length; i++) {
+      myControllers[i].dispose();
+    }
     super.dispose();
   }
 }
