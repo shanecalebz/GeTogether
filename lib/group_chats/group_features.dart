@@ -12,7 +12,9 @@ import 'group_beforechat.dart';
 import 'group_beforefinance.dart';
 
 class GroupFeatureScreen extends StatefulWidget {
-  const GroupFeatureScreen({Key? key}) : super(key: key);
+
+  final Function goToNotifications;
+  GroupFeatureScreen({required this.goToNotifications});
 
   @override
   _GroupFeatureScreenState createState() => _GroupFeatureScreenState();
@@ -92,7 +94,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
               child: TextButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => GroupBeforeFinanceScreen(),
+                    builder: (_) => GroupBeforeFinanceScreen(goToNotifications: widget.goToNotifications),
                   ),
                 ),
                 child: Text('Finance'),
@@ -156,16 +158,12 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           width: 350,
                           child: TextButton(
                             onPressed: () async {
-                              final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => QRScanner()));
+                              final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => QRScanner()));
                               if (result != null) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            CalculateTotalPrice(menu: result)));
+                                final result2 = await Navigator.push(context, MaterialPageRoute(builder: (_) => CalculateTotalPrice(menu: result)));
+                                if (result2 != null) {
+                                  widget.goToNotifications();
+                                }
                               }
                             },
                             child: Text('QR + Calculator'),

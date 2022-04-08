@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -22,6 +24,13 @@ class _CalculateTotalPriceState extends State<CalculateTotalPrice> {
   late bool itemSelected;
   List<String> amountPerItem = [];
   PanelController panelController = new PanelController();
+  List<DropdownMenuItem<String>> users = [];
+  List<String> userUID = [];
+  late bool currentUserInGroup;
+  late String currentUserName;
+  String dropDownMenuString = "";
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -31,6 +40,43 @@ class _CalculateTotalPriceState extends State<CalculateTotalPrice> {
         amountPerItem.add(i.toString() + "," + j.toString() + "," + widget.menu.split('-')[i].split('+')[j].split('\$')[1] + ",0," + widget.menu.split('-')[i].split('+')[j].split('\$')[0]); // INDEX FOR I, INDEX FOR J, PRICE FOR INDEX, AMOUNT FOR INDEX, ITEM NAME
       }
     }
+    getUserList();
+  }
+
+  void getUserList() {
+    users.clear();
+    userUID.clear();
+    _firestore.collection('groups').get().then((value) => value.docs.forEach((element) {
+      currentUserInGroup = false;
+      for (Map user in element.data()['members'])  {
+        // CHECK IF CURRENT USER IS IN THE GROUP
+        if (_auth.currentUser?.uid == user['uid']) {
+          currentUserName = user['name'];
+          currentUserInGroup = true;
+        }
+      }
+
+      if (currentUserInGroup == true) {
+        for (Map user in element.data()['members'])  {
+          if (!(userUID.contains(user['uid']))) {
+            // USER NOT ADDED TO LIST YET
+            if (_auth.currentUser?.uid != user['uid']) {
+              var item = DropdownMenuItem<String>(
+                child: Text(user['name']),
+                value: user['uid'] + "," + user['name'],
+              );
+              setState(() {
+                if (users.isEmpty) {
+                  dropDownMenuString = user['uid'] + "," + user['name'];
+                }
+                users.add(item);
+              });
+            }
+            userUID.add(user['uid']);
+          }
+        }
+      }
+      }));
   }
 
   void calculatePrice() {
@@ -352,6 +398,65 @@ class _CalculateTotalPriceState extends State<CalculateTotalPrice> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30.0, left: 15.0),
+                  child: Text(
+                    "Bill Paid By",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15.0,
+                      )
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: DropdownButton(
+                        isExpanded: true,
+                        items: users,
+                        value: dropDownMenuString,
+                        onChanged: (value) {
+                          setState(() {
+                            dropDownMenuString = value.toString();
+                          });
+                        }
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0, left: 15.0, right: 15.0),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          String temp = _auth.currentUser!.uid + "," + currentUserName + "," + totalPrice.toStringAsFixed(2) + ",no,no;";
+                          temp += dropDownMenuString.split(',')[0] + "," + dropDownMenuString.split(',')[1] + "," + totalPrice.toStringAsFixed(2) + ",no,yes";
+                          // APPEND TO FIRESTORE
+                          _firestore.collection('notifications').add({'test': temp, 'eventTime': DateTime.now().millisecondsSinceEpoch.toString()});
+                          Navigator.pop(context, "PUSH");
+                        },
+                        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                        child: const Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                fontSize: 15.0,
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                        )
+                      )
+                    ),
+                  ),
+                )
               ],
             ),
           ),

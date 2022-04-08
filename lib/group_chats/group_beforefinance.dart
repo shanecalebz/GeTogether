@@ -6,7 +6,9 @@ import 'group_chat_room.dart';
 import 'package:getogether/finance/finance_features.dart';
 
 class GroupBeforeFinanceScreen extends StatefulWidget {
-  const GroupBeforeFinanceScreen({Key? key}) : super(key: key);
+
+  final Function goToNotifications;
+  GroupBeforeFinanceScreen({required this.goToNotifications});
 
   @override
   _GroupBeforeFinanceScreenState createState() =>
@@ -66,6 +68,7 @@ class _GroupBeforeFinanceScreenState extends State<GroupBeforeFinanceScreen> {
                   builder: (_) => FinanceFeatureScreen(
                     groupName: groupList[index]['name'],
                     groupChatId: groupList[index]['id'],
+                    goToNotifications: widget.goToNotifications,
                   )),
             ),
             leading: Icon(Icons.group),

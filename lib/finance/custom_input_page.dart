@@ -12,8 +12,9 @@ import 'package:getogether/group_chats/group_info.dart';
 class EqualInput extends StatefulWidget {
   static String id = 'equal_page';
   final String groupChatId, groupName;
+  final Function goToNotifications;
   const EqualInput(
-      {required this.groupChatId, required this.groupName, Key? key})
+      {required this.groupChatId, required this.groupName, required this.goToNotifications, Key? key})
       : super(key: key);
 
   @override
@@ -292,16 +293,21 @@ class _EqualInputState extends State<EqualInput> {
           String temp = "";
           for (int i = 0; i < membersList.length; i++) {
             if (_auth.currentUser?.uid == membersList[i]['uid']) {
-              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toString() + ",no,yes";
+              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toStringAsFixed(2) + ",no,yes";
             } else {
-              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toString() + ",no,no";
+              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toStringAsFixed(2) + ",no,no";
             }
             if (i != (membersList.length - 1)) {
               temp += ";";
             }
           }
           // APPEND TO FIRESTORE
-          _firestore.collection('notifications').add({'test': temp});},
+          _firestore.collection('notifications').add({'test': temp, 'eventTime': DateTime.now().millisecondsSinceEpoch.toString()});
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          widget.goToNotifications();
+        },
         tooltip: "Create Group",
       ),
     );

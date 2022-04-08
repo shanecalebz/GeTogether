@@ -42,6 +42,8 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
     });
   }
 
+  void goToNotifications() {}
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -72,7 +74,7 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
                   return ListTile(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => GroupFeatureScreen(
+                        builder: (_) => GroupFeatureScreen(goToNotifications: goToNotifications,
                             /*
                         builder: (_) => GroupChatRoom(
                           groupName: groupList[index]['name'],

@@ -11,15 +11,24 @@ class BottomNavScreen extends StatefulWidget {
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
-  final List _screens = [
-    GroupFeatureScreen(),
-    HomeScreen(),
-    SettingsPage(),
-  ];
+
+  void goToNotifications() {
+    setState(() {
+      _currentIndex = 1;
+    });
+  }
+
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+
+    final List _screens = [
+      GroupFeatureScreen(goToNotifications: goToNotifications),
+      HomeScreen(),
+      SettingsPage(),
+    ];
+
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

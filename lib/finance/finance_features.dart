@@ -12,8 +12,9 @@ import 'package:getogether/finance/custom_page.dart';
 class FinanceFeatureScreen extends StatefulWidget {
   static String id = 'equal_page';
   final String groupChatId, groupName;
+  final Function goToNotifications;
   const FinanceFeatureScreen(
-      {required this.groupChatId, required this.groupName, Key? key})
+      {required this.groupChatId, required this.groupName, required this.goToNotifications, Key? key})
       : super(key: key);
 
   @override
@@ -69,6 +70,7 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                       builder: (_) => EqualInput(
                         groupChatId: widget.groupChatId,
                         groupName: widget.groupName,
+                        goToNotifications: widget.goToNotifications,
                       ),
                     ),
                   ),
