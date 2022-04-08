@@ -208,7 +208,7 @@ class _CustomInputState extends State<CustomInput> {
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
-                      itemCount: userData.length,
+                      itemCount: membersList.length,
                       itemBuilder: (context, index) {
                         return Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -233,11 +233,11 @@ class _CustomInputState extends State<CustomInput> {
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-                                                  userIcon(userData[index]),
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  userName(userData[index]),
+                                                  Text(membersList[index]
+                                                      ['name']),
                                                   Spacer(),
                                                   SizedBox(
                                                     width: 50,

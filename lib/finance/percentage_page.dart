@@ -47,6 +47,7 @@ class _PercentageInputState extends State<PercentageInput> {
     });
   }
 
+  final myController = TextEditingController();
   var userData = UserData.getData;
 
   // This is the default bill amount
@@ -205,7 +206,7 @@ class _PercentageInputState extends State<PercentageInput> {
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
-                      itemCount: userData.length,
+                      itemCount: membersList.length,
                       itemBuilder: (context, index) {
                         return Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -230,32 +231,17 @@ class _PercentageInputState extends State<PercentageInput> {
                                             children: <Widget>[
                                               Row(
                                                 children: <Widget>[
-                                                  userIcon(userData[index]),
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  userName(userData[index]),
+                                                  Text(membersList[index]
+                                                      ['name']),
                                                   Spacer(),
-                                                  Container(
-                                                    margin: EdgeInsets.all(15),
-                                                    padding: EdgeInsets.all(15),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(15),
-                                                      ),
-                                                      border: Border.all(
-                                                          color: Colors.white),
-                                                    ),
-                                                    child: Column(
-                                                      children: [
-                                                        AmountText(
-                                                          'Amount Payable: ${_getFinalAmount()}',
-                                                          key: Key(
-                                                              'finalAmount'),
-                                                        )
-                                                      ],
+                                                  SizedBox(
+                                                    width: 50,
+                                                    height: 50,
+                                                    child: TextField(
+                                                      controller: myController,
                                                     ),
                                                   )
                                                 ],
