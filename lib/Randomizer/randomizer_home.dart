@@ -12,9 +12,13 @@ class _RandomizerHomeState extends State<RandomizerHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.people_outline),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            }, icon: Icon(Icons.arrow_back),
+      ),
         leadingWidth: 60,
-        title: Text('Quickview'),
+        title: Center(child: Text("Activities")),
         actions: [
           IconButton(
             onPressed: () {},
