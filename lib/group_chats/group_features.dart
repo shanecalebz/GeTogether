@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:getogether/group_chats/group_chat_screen.dart';
 import 'package:getogether/qrscanner/qr_scanner.dart';
 import '../Randomizer/randomizer_home.dart';
+import '../finance/finance_features.dart';
 import '../qrscanner/calculate_total_price.dart';
 import '../utils/constants.dart';
 import 'create_group/add_members.dart';
 import 'group_beforechat.dart';
+import 'group_beforefinance.dart';
 
 class GroupFeatureScreen extends StatefulWidget {
   const GroupFeatureScreen({Key? key}) : super(key: key);
@@ -90,9 +92,11 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
               height: 75,
               width: 350,
               child: TextButton(
-                onPressed: () {
-                  print('you clicked me');
-                },
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => GroupBeforeFinanceScreen(),
+                  ),
+                ),
                 child: Text('Finance'),
                 style: TextButton.styleFrom(
                     textStyle: TextStyle(fontSize: 50,fontFamily: 'JosefinSans'),
