@@ -27,9 +27,10 @@ class _SettingsPageState extends State<SettingsPage> {
               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)),
           SizedBox(height: 20),
           ProfileMenu(
-            text: "My Account",
+            text: "My Profile",
             icon: "assets/icons/User Icon.svg",
-            press: () => {},
+            press: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => ProfileView())),
           ),
           ProfileMenu(
             text: "Notifications",

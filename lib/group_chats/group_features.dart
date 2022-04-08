@@ -12,7 +12,6 @@ import 'group_beforechat.dart';
 import 'group_beforefinance.dart';
 
 class GroupFeatureScreen extends StatefulWidget {
-
   final Function goToNotifications;
   GroupFeatureScreen({required this.goToNotifications});
 
@@ -58,61 +57,77 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
           backgroundColor: Palette.primaryColor,
           automaticallyImplyLeading: false,
         ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          height: size.height,
-          width: size.width,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-                children: [
-            Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-              height: 75,
-              width: 350,
-              child: TextButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => GroupBeforeChatScreen(),
-                  ),
-                ),
-              child: Text('Group Chat'),
-              style: TextButton.styleFrom(
-                  textStyle: TextStyle(fontSize: 50, fontFamily: 'JosefinSans'),
-                  primary: Colors.white,
-                  backgroundColor: Colors.deepPurple),
+        body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                height: size.height,
+                width: size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SizedBox(
+                          height: 75,
+                          width: 350,
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => GroupBeforeChatScreen(),
+                              ),
+                            ),
+                            child: Text('Group Chat'),
+                            style: TextButton.styleFrom(
+                              textStyle: TextStyle(
+                                  fontSize: 50,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold),
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              backgroundColor: Color(0xFFF5F6F9),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-              height: 75,
-              width: 350,
-              child: TextButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => GroupBeforeFinanceScreen(goToNotifications: widget.goToNotifications),
-                  ),
-                ),
-                child: Text('Finance'),
-                style: TextButton.styleFrom(
-                    textStyle: TextStyle(fontSize: 50,fontFamily: 'JosefinSans'),
-                    primary: Colors.white,
-                    backgroundColor: Colors.deepPurple),
-                    ),
-                  ),
-                ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 75,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => RandomizerHome()),),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SizedBox(
+                          height: 75,
+                          width: 350,
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => GroupBeforeFinanceScreen(
+                                    goToNotifications:
+                                        widget.goToNotifications),
+                              ),
+                            ),
+                            child: Text('Finance'),
+                            style: TextButton.styleFrom(
+                              textStyle: TextStyle(
+                                  fontSize: 50,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold),
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              backgroundColor: Color(0xFFF5F6F9),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SizedBox(
+                          height: 75,
+                          width: 350,
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (_) => RandomizerHome()),
+                            ),
                             child: Text('Randomizer'),
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(
@@ -158,9 +173,16 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           width: 350,
                           child: TextButton(
                             onPressed: () async {
-                              final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => QRScanner()));
+                              final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => QRScanner()));
                               if (result != null) {
-                                final result2 = await Navigator.push(context, MaterialPageRoute(builder: (_) => CalculateTotalPrice(menu: result)));
+                                final result2 = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            CalculateTotalPrice(menu: result)));
                                 if (result2 != null) {
                                   widget.goToNotifications();
                                 }

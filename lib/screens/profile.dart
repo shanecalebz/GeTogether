@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,6 +11,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +59,10 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     SizedBox(height: 20.0),
                     RaisedButton(
-                      onPressed: () {
-                        // TODO: Save somehow
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => _firestore
+                          .collection('users')
+                          .doc(_auth.currentUser?.uid)
+                          .update({'bio': "ENTER STRING HERE"}),
                       child: Text("Save Profile"),
                     )
                   ],
