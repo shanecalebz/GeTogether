@@ -111,6 +111,7 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                         builder: (_) => PercentageInput(
                               groupName: widget.groupName,
                               groupChatId: widget.groupChatId,
+                              goToNotifications: widget.goToNotifications,
                             )),
                   ),
                   child: Text('Percentage Input'),

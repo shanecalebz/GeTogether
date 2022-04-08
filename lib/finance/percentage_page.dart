@@ -10,8 +10,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 class PercentageInput extends StatefulWidget {
   static String id = 'percentage_page';
   final String groupChatId, groupName;
+  final Function goToNotifications;
   const PercentageInput(
-      {required this.groupChatId, required this.groupName, Key? key})
+      {required this.groupChatId,
+      required this.groupName,
+      required this.goToNotifications,
+      Key? key})
       : super(key: key);
 
   @override
@@ -42,18 +46,23 @@ class _PercentageInputState extends State<PercentageInput> {
         .then((chatMap) {
       membersList = chatMap['members'];
       print(membersList);
+
+      for (int i = 0; i < membersList.length; i++) {
+        TextEditingController controller = TextEditingController();
+        percControllers.add(controller);
+      }
       isLoading = false;
       setState(() {});
     });
   }
 
-  final myController = TextEditingController();
+  List<TextEditingController> percControllers = [];
   var userData = UserData.getData;
 
   // This is the default bill amount
   static const defaultBillAmount = 0.0;
 
-  // This is the default tip percentage
+  // This is the default percentage
   static const defaultNumberOfPeople = 1;
 
   // This is the TextEditingController which is used to keep track of the change in bill amount
@@ -241,9 +250,34 @@ class _PercentageInputState extends State<PercentageInput> {
                                                     width: 50,
                                                     height: 50,
                                                     child: TextField(
-                                                      controller: myController,
+                                                      controller:
+                                                          percControllers[
+                                                              index],
                                                     ),
-                                                  )
+                                                  ),
+                                                  Spacer(),
+                                                  /*Container(
+                                                    margin: EdgeInsets.all(15),
+                                                    padding: EdgeInsets.all(15),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(15),
+                                                      ),
+                                                      border: Border.all(
+                                                          color: Colors.white),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        AmountText(
+                                                          'Amount Payable: \$${(_billAmount * (double.parse(percControllers[index].text)) / 100).toStringAsFixed(2)}',
+                                                          key: Key(
+                                                              'finalAmount'),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )*/
                                                 ],
                                               )
                                             ],
@@ -269,7 +303,46 @@ class _PercentageInputState extends State<PercentageInput> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.blueAccent,
         label: Text("Submit"),
-        onPressed: () {},
+        onPressed: () {
+          /*for (int i = 0; i < membersList.length; i++) {
+            print(
+                "${membersList[i]['name']} pays \$${_billAmount * (double.parse(percControllers[i].text)) / 100}.");
+          }*/
+
+          // CREATE STRING
+          String temp = "";
+          for (int i = 0; i < membersList.length; i++) {
+            if (_auth.currentUser?.uid == membersList[i]['uid']) {
+              temp += membersList[i]['uid'] +
+                  "," +
+                  membersList[i]['name'] +
+                  "," +
+                  (_billAmount * (double.parse(percControllers[i].text)) / 100)
+                      .toStringAsFixed(2) +
+                  ",no,yes";
+            } else {
+              temp += membersList[i]['uid'] +
+                  "," +
+                  membersList[i]['name'] +
+                  "," +
+                  (_billAmount * (double.parse(percControllers[i].text)) / 100)
+                      .toStringAsFixed(2) +
+                  ",no,no";
+            }
+            if (i != (membersList.length - 1)) {
+              temp += ";";
+            }
+          }
+          // APPEND TO FIRESTORE
+          _firestore.collection('notifications').add({
+            'test': temp,
+            'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
+          });
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          widget.goToNotifications();
+        },
         tooltip: "Create Group",
       ),
     );
@@ -281,6 +354,9 @@ class _PercentageInputState extends State<PercentageInput> {
     // when this widget is cleared from the memory.
     _billAmountController.dispose();
     _numberOfPeopleController.dispose();
+    for (int i = 0; i < percControllers.length; i++) {
+      percControllers[i].dispose();
+    }
     super.dispose();
   }
 }
