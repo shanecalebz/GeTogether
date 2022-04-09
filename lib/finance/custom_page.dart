@@ -9,8 +9,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomInput extends StatefulWidget {
   final String groupChatId, groupName;
+  final Function goToNotifications;
   const CustomInput(
-      {required this.groupChatId, required this.groupName, Key? key})
+      {required this.groupChatId,
+      required this.groupName,
+      required this.goToNotifications,
+      Key? key})
       : super(key: key);
   static String id = 'custom_page';
 
@@ -249,7 +253,8 @@ class _CustomInputState extends State<CustomInput> {
                                                     width: 50,
                                                     height: 50,
                                                     child: TextField(
-                                                      controller: myControllers[index],
+                                                      controller:
+                                                          myControllers[index],
                                                     ),
                                                   )
                                                 ],
@@ -278,18 +283,42 @@ class _CustomInputState extends State<CustomInput> {
         backgroundColor: Colors.blueAccent,
         label: Text("Submit"),
         onPressed: () {
-          for (int i = 0; i < myControllers.length; i++) {
-            print(membersList[i]['name'] + " entered value is " + myControllers[i].text);
+          /*for (int i = 0; i < membersList.length; i++) {
+            print(
+                "${membersList[i]['name']} pays \$${(double.parse(myControllers[i].text)).toStringAsFixed(2)}.");
+          }*/
+
+          // CREATE STRING
+          String temp = "";
+          for (int i = 0; i < membersList.length; i++) {
+            if (_auth.currentUser?.uid == membersList[i]['uid']) {
+              temp += membersList[i]['uid'] +
+                  "," +
+                  membersList[i]['name'] +
+                  "," +
+                  (double.parse(myControllers[i].text)).toStringAsFixed(2) +
+                  ",no,yes";
+            } else {
+              temp += membersList[i]['uid'] +
+                  "," +
+                  membersList[i]['name'] +
+                  "," +
+                  (double.parse(myControllers[i].text)).toStringAsFixed(2) +
+                  ",no,no";
+            }
+            if (i != (membersList.length - 1)) {
+              temp += ";";
+            }
           }
-          /*
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Text(myController.text),
-                );
-              });
-           */
+          // APPEND TO FIRESTORE
+          _firestore.collection('notifications').add({
+            'test': temp,
+            'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
+          });
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          widget.goToNotifications();
         },
         tooltip: "Create Group",
       ),
