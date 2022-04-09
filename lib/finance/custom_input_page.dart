@@ -23,8 +23,9 @@ class EqualInput extends StatefulWidget {
 
 class _EqualInputState extends State<EqualInput> {
   List membersList = [];
-  bool isLoading = true;
   List groupList = [];
+  bool isLoading = true;
+  bool billAmountValidated = false;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -55,14 +56,14 @@ class _EqualInputState extends State<EqualInput> {
   var userData = UserData.getData;
 
   // This is the default bill amount
-  static const defaultBillAmount = 0.0;
+  static const defaultBillAmount = 0.00;
 
   // This is the default tip percentage
   static const defaultNumberOfPeople = 1;
 
   // This is the TextEditingController which is used to keep track of the change in bill amount
   final _billAmountController =
-      TextEditingController(text: defaultBillAmount.toString());
+      TextEditingController(text: defaultBillAmount.toStringAsFixed(2));
 
   // This is the TextEditingController which is used to keep track of the change in tip percentage
   final _numberOfPeopleController =
@@ -74,10 +75,19 @@ class _EqualInputState extends State<EqualInput> {
   // This stores the latest value of tip percentage calculated
   int _numberOfPeople = defaultNumberOfPeople;
 
-  _getFinalAmount() => _billAmount / membersList.length;
+  _getFinalAmount() => (_billAmount / membersList.length).toStringAsFixed(2);
 
   _onBillAmountChanged() {
     setState(() {
+
+      // VALIDATE THE AMOUNT
+      billAmountValidated = false;
+      if (_billAmountController.text.isNotEmpty) {
+        if (double.parse(_billAmountController.text) > 0.00) {
+          billAmountValidated = true;
+        }
+      }
+
       _billAmount = double.tryParse(_billAmountController.text) ?? 0.0;
     });
   }
@@ -257,7 +267,7 @@ class _EqualInputState extends State<EqualInput> {
                                                     child: Column(
                                                       children: [
                                                         AmountText(
-                                                          'Amount Payable: ${_getFinalAmount()}',
+                                                          'Amount Payable: \$ ${_getFinalAmount()}',
                                                           key: Key(
                                                               'finalAmount'),
                                                         )
@@ -287,28 +297,53 @@ class _EqualInputState extends State<EqualInput> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: billAmountValidated ? Color(0XFFFEA828) : Colors.grey,
         label: Text("Submit"),
         onPressed: () {// CREATE STRING
           String temp = "";
-          for (int i = 0; i < membersList.length; i++) {
-            if (_auth.currentUser?.uid == membersList[i]['uid']) {
-              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toStringAsFixed(2) + ",no,yes";
-            } else {
-              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + "," + (_billAmount / membersList.length).toStringAsFixed(2) + ",no,no";
-            }
-            if (i != (membersList.length - 1)) {
-              temp += ";";
-            }
+          if (_billAmount == 0 || _billAmount < 0) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                  "Invalid Bill Amount",
+                  style: TextStyle(
+                    color: Colors.white,
+                  )
+              ),
+              duration: Duration(seconds: 3),
+              backgroundColor: Color(0XFFFEA828),
+            )
+            );
           }
-          // APPEND TO FIRESTORE
-          _firestore.collection('notifications').add({'test': temp, 'eventTime': DateTime.now().millisecondsSinceEpoch.toString()});
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-          widget.goToNotifications();
+        else {
+            for (int i = 0; i < membersList.length; i++) {
+              if (_auth.currentUser?.uid == membersList[i]['uid']) {
+                temp +=
+                    membersList[i]['uid'] + "," + membersList[i]['name'] + "," +
+                        (_billAmount / membersList.length).toStringAsFixed(2) +
+                        ",no,yes";
+              } else {
+                temp +=
+                    membersList[i]['uid'] + "," + membersList[i]['name'] + "," +
+                        (_billAmount / membersList.length).toStringAsFixed(2) +
+                        ",no,no";
+              }
+              if (i != (membersList.length - 1)) {
+                temp += ";";
+              }
+            }
+            // APPEND TO FIRESTORE
+            _firestore.collection('notifications').add(
+                {'test': temp, 'eventTime': DateTime
+                    .now()
+                    .millisecondsSinceEpoch
+                    .toString()});
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            widget.goToNotifications();
+          }
         },
-        tooltip: "Create Group",
+        tooltip: "Submit",
       ),
     );
   }
