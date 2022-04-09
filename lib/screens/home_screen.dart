@@ -290,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Text(DateFormat('dd MMM yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(userList[i].split(',')[7].toString())))),
                                         ],
                                       ),
-                                      Text("\$" + userList[j].split(',')[3]),
+                                      Text("\$" + userList[i].split(',')[3]),
                                     ],
                                   ),
                                 )

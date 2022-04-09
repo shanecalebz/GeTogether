@@ -24,6 +24,7 @@ class CustomInput extends StatefulWidget {
 
 class _CustomInputState extends State<CustomInput> {
   List membersList = [];
+  List membersListFinal = [];
   bool isLoading = true;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -45,17 +46,34 @@ class _CustomInputState extends State<CustomInput> {
         .get()
         .then((chatMap) {
       membersList = chatMap['members'];
-      print(membersList);
 
       for (int i = 0; i < membersList.length; i++) {
-        TextEditingController controller = TextEditingController();
-        myControllers.add(controller);
+        if (membersList[i]['uid'] != _auth.currentUser!.uid) {
+          membersListFinal.add(membersList[i]);
+          TextEditingController controller = TextEditingController();
+          myControllers.add(controller);
+        }
+      }
+      for (int i = 0; i < myControllers.length; i++) {
+        myControllers[i].addListener(() {calculateTotal();});
       }
 
       isLoading = false;
       setState(() {});
     });
   }
+
+  double totalPrice = 0;
+
+  void calculateTotal() {
+    totalPrice = 0;
+    for (int i = 0; i < myControllers.length; i++) {
+      setState(() {
+        totalPrice += double.parse(myControllers[i].text);
+      });
+    }
+  }
+
 
   List<TextEditingController> myControllers = [];
   var userData = UserData.getData;
@@ -102,27 +120,38 @@ class _CustomInputState extends State<CustomInput> {
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(
             height: 30.0,
           ),
-          TextFormField(
-            key: Key("billAmount"),
-            controller: _billAmountController,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(
-              hintText: 'Enter the Bill Amount',
-              labelText: 'Bill Amount',
-              labelStyle: TextStyle(
-                fontSize: 25.0,
-                letterSpacing: 1,
-                fontWeight: FontWeight.bold,
-              ),
-              fillColor: Colors.white,
-              border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(20.0),
-              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+            child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.all(Radius.circular(24.0)),
+                ),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Bill Amount",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text("\$" + totalPrice.toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ),
           ),
 /*          TextField(
@@ -155,6 +184,7 @@ class _CustomInputState extends State<CustomInput> {
               ),
             ),
           ),*/
+      /*
           Row(
             children: <Widget>[
               Expanded(
@@ -207,6 +237,7 @@ class _CustomInputState extends State<CustomInput> {
               ),
             ],
           ),
+          */
           SizedBox(
             height: 20.0,
           ),
@@ -218,54 +249,58 @@ class _CustomInputState extends State<CustomInput> {
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
-                      itemCount: membersList.length,
+                      itemCount: membersListFinal.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          height: 135,
-                          width: double.maxFinite,
-                          child: Card(
-                            elevation: 5,
-                            child: Padding(
-                              padding: EdgeInsets.all(7.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 10,
-                                            top: 5,
-                                          ),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Row(
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(membersList[index]
-                                                      ['name']),
-                                                  Spacer(),
-                                                  SizedBox(
-                                                    width: 50,
-                                                    height: 50,
-                                                    child: TextField(
-                                                      controller:
-                                                          myControllers[index],
+                        return Padding(
+                          padding: (index == (membersListFinal.length - 1)) ? const EdgeInsets.only(bottom: 80.0) : const EdgeInsets.all(0.0),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            height: 135,
+                            width: double.maxFinite,
+                            child: Card(
+                              elevation: 5,
+                              child: Padding(
+                                padding: EdgeInsets.all(7.0),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                              top: 5,
+                                            ),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      height: 10,
                                                     ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                                    Text(membersListFinal[index]
+                                                        ['name']),
+                                                    Spacer(),
+                                                    SizedBox(
+                                                      width: 50,
+                                                      height: 50,
+                                                      child: TextField(
+                                                        keyboardType: TextInputType.number,
+                                                        controller:
+                                                            myControllers[index],
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -283,33 +318,25 @@ class _CustomInputState extends State<CustomInput> {
         backgroundColor: Colors.blueAccent,
         label: Text("Submit"),
         onPressed: () {
-          /*for (int i = 0; i < membersList.length; i++) {
+          /*for (int i = 0; i < membersListFinal.length; i++) {
             print(
-                "${membersList[i]['name']} pays \$${(double.parse(myControllers[i].text)).toStringAsFixed(2)}.");
+                "${membersListFinal[i]['name']} pays \$${(double.parse(myControllers[i].text)).toStringAsFixed(2)}.");
           }*/
 
           // CREATE STRING
           String temp = "";
+          for (int i = 0; i < membersListFinal.length; i++) {
+            temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] + "," +
+                (double.parse(myControllers[i].text)).toStringAsFixed(2) + ",no,no;";
+          }
+          // OWNER ONLY
           for (int i = 0; i < membersList.length; i++) {
-            if (_auth.currentUser?.uid == membersList[i]['uid']) {
-              temp += membersList[i]['uid'] +
-                  "," +
-                  membersList[i]['name'] +
-                  "," +
-                  (double.parse(myControllers[i].text)).toStringAsFixed(2) +
-                  ",no,yes";
-            } else {
-              temp += membersList[i]['uid'] +
-                  "," +
-                  membersList[i]['name'] +
-                  "," +
-                  (double.parse(myControllers[i].text)).toStringAsFixed(2) +
-                  ",no,no";
-            }
-            if (i != (membersList.length - 1)) {
-              temp += ";";
+            if (membersList[i]['uid'] == _auth.currentUser!.uid) {
+              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
+              break;
             }
           }
+
           // APPEND TO FIRESTORE
           _firestore.collection('notifications').add({
             'test': temp,
