@@ -17,6 +17,7 @@ class GroupChatRoom extends StatelessWidget {
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ScrollController scrollController = new ScrollController();
 
   File? imageFile;
 
@@ -90,11 +91,19 @@ class GroupChatRoom extends StatelessWidget {
           .doc(groupChatId)
           .collection('chats')
           .add(chatData);
+
+      // SCROLL TO END
+      scrollToEnd();
     }
+  }
+
+  void scrollToEnd() {
+    scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 500), curve:Curves.fastOutSlowIn);
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) { scrollToEnd(); });
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -113,72 +122,69 @@ class GroupChatRoom extends StatelessWidget {
               icon: Icon(Icons.more_vert)),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: size.height / 1.27,
-              width: size.width,
-              child: StreamBuilder<QuerySnapshot>(
-                stream: _firestore
-                    .collection('groups')
-                    .doc(groupChatId)
-                    .collection('chats')
-                    .orderBy('time')
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        Map<String, dynamic> chatMap =
-                            snapshot.data!.docs[index].data()
-                                as Map<String, dynamic>;
+      body: Column(
+        children: [
+          Flexible(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _firestore
+                  .collection('groups')
+                  .doc(groupChatId)
+                  .collection('chats')
+                  .orderBy('time')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    controller: scrollController,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> chatMap =
+                          snapshot.data!.docs[index].data()
+                              as Map<String, dynamic>;
 
-                        return messageTile(size, chatMap, context);
-                      },
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
+                      return messageTile(size, chatMap, context);
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
             ),
-            Container(
-              height: size.height / 10,
-              width: size.width,
-              alignment: Alignment.center,
-              child: Container(
-                height: size.height / 12,
-                width: size.width / 1.1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: size.height / 17,
-                      width: size.width / 1.3,
-                      child: TextField(
-                        controller: _message,
-                        decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () => getImage(),
-                              icon: Icon(Icons.photo),
-                            ),
-                            hintText: "Send Message",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            )),
-                      ),
+          ),
+          Container(
+            height: size.height / 10,
+            width: size.width,
+            alignment: Alignment.center,
+            child: Container(
+              height: size.height / 12,
+              width: size.width / 1.1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: size.height / 17,
+                    width: size.width / 1.3,
+                    child: TextField(
+                      controller: _message,
+                      decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            onPressed: () => getImage(),
+                            icon: Icon(Icons.photo),
+                          ),
+                          hintText: "Send Message",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          )),
                     ),
-                    IconButton(
-                        icon: Icon(Icons.send), onPressed: onSendMessage),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.send), onPressed: onSendMessage),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -199,6 +205,7 @@ class GroupChatRoom extends StatelessWidget {
                 color: Colors.blue,
               ),
               child: Column(
+                crossAxisAlignment: chatMap['sendBy'] == _auth.currentUser!.displayName ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
                   Text(
                     chatMap['sendBy'],
