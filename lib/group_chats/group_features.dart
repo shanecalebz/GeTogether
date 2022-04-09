@@ -60,11 +60,11 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
               height: size.height,
               width: size.width,
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: SizedBox(
                         height: 75,
                         width: 350,
@@ -86,7 +86,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: SizedBox(
                         height: 75,
                         width: 350,
@@ -96,14 +96,14 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           },
                           child: Text('Finance'),
                           style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 50),
+                              textStyle: TextStyle(fontSize: 40),
                               primary: Colors.white,
                               backgroundColor: Colors.deepPurple),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: SizedBox(
                         height: 75,
                         width: 350,
@@ -113,19 +113,14 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           ),
                           child: Text('Randomizer'),
                           style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 50),
+                              textStyle: TextStyle(fontSize: 40),
                               primary: Colors.white,
                               backgroundColor: Colors.deepPurple),
                         ),
-                        child: Text('Randomizer'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 35),
-                            primary: Colors.white,
-                            backgroundColor: Colors.lightBlueAccent),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: SizedBox(
                         height: 75,
                         width: 350,
@@ -136,7 +131,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           ),
                           child: Text('Create Group'),
                           style: TextButton.styleFrom(
-                              textStyle: TextStyle(fontSize: 50),
+                              textStyle: TextStyle(fontSize: 40),
                               primary: Colors.white,
                               backgroundColor: Colors.deepPurple),
                         ),
@@ -145,43 +140,26 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: SizedBox(
-                        height: 75,
+                        height: 100,
                         width: 350,
                         child: TextButton(
-                          onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => AddMembersInGroup()),
-                          ),
-                          child: Text('QR Code'),
+                          onPressed: () async {
+                            final result = await Navigator.push(context,
+                                MaterialPageRoute(builder: (_) => QRScanner()));
+                            if (result != null) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          CalculateTotalPrice(menu: result)));
+                            }
+                          },
+                          child: Text('QR + Calculator'),
                           style: TextButton.styleFrom(
                               textStyle: TextStyle(fontSize: 40),
                               primary: Colors.white,
                               backgroundColor: Colors.deepPurple),
                         ),
-                        child: Text('Create Group'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 35),
-                            primary: Colors.white,
-                            backgroundColor: Colors.lightBlueAccent),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                      height: 100,
-                      width: 350,
-                      child: TextButton(
-                        onPressed: () async {
-                          final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => QRScanner()));
-                          if (result != null) {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => CalculateTotalPrice(menu: result)));
-                          }},
-                        child: Text('QR + Calculator'),
-                        style: TextButton.styleFrom(
-                            textStyle: TextStyle(fontSize: 35),
-                            primary: Colors.white,
-                            backgroundColor: Colors.lightBlueAccent),
                       ),
                     ),
                   ],

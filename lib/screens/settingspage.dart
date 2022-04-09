@@ -29,7 +29,9 @@ class _SettingsPageState extends State<SettingsPage> {
           ProfileMenu(
             text: "My Account",
             icon: "assets/icons/User Icon.svg",
-            press: () => {},
+            press: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => ProfileView()),
+            ),
           ),
           ProfileMenu(
             text: "Notifications",
