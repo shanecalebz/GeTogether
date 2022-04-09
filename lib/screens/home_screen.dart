@@ -324,11 +324,12 @@ class _HomeScreenState extends State<HomeScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Color(0XFFFEA828),
           bottom: TabBar(
             tabs: [
-              Tab(text: "You Owe"),
-              Tab(text: "They Owe"),
+              Tab(text: "Settle Up"),
+              Tab(text: "Collect"),
             ]
           ),
           title: Text("GeTogether"),
