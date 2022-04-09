@@ -50,6 +50,14 @@ class _PercentageInputState extends State<PercentageInput> {
       for (int i = 0; i < membersList.length; i++) {
         TextEditingController controller = TextEditingController();
         percControllers.add(controller);
+        percControllers[i].text = "0";
+        if (double.parse(percControllers[i].text) >= 0) {
+          percControllers[i].addListener(() {
+            setState(() {});
+          });
+        } else {
+          percControllers[i].text = "0";
+        }
       }
       isLoading = false;
       setState(() {});
@@ -256,7 +264,7 @@ class _PercentageInputState extends State<PercentageInput> {
                                                     ),
                                                   ),
                                                   Spacer(),
-                                                  /*Container(
+                                                  Container(
                                                     margin: EdgeInsets.all(15),
                                                     padding: EdgeInsets.all(15),
                                                     decoration: BoxDecoration(
@@ -270,14 +278,11 @@ class _PercentageInputState extends State<PercentageInput> {
                                                     ),
                                                     child: Column(
                                                       children: [
-                                                        AmountText(
-                                                          'Amount Payable: \$${(_billAmount * (double.parse(percControllers[index].text)) / 100).toStringAsFixed(2)}',
-                                                          key: Key(
-                                                              'finalAmount'),
-                                                        )
+                                                        calculateFinalAmount(
+                                                            index),
                                                       ],
                                                     ),
-                                                  )*/
+                                                  )
                                                 ],
                                               )
                                             ],
@@ -348,6 +353,20 @@ class _PercentageInputState extends State<PercentageInput> {
     );
   }
 
+  Widget calculateFinalAmount(int index) {
+    if (percControllers[index].text.isEmpty) {
+      return AmountText(
+        'Amount Payable: \$0',
+        key: Key('finalAmount'),
+      );
+    } else {
+      return AmountText(
+        'Amount Payable: \$${(_billAmount * (double.parse(percControllers[index].text)) / 100).toStringAsFixed(2)}',
+        key: Key('finalAmount'),
+      );
+    }
+  }
+
   @override
   void dispose() {
     // To make sure we are not leaking anything, dispose any used TextEditingController
@@ -357,6 +376,7 @@ class _PercentageInputState extends State<PercentageInput> {
     for (int i = 0; i < percControllers.length; i++) {
       percControllers[i].dispose();
     }
+
     super.dispose();
   }
 }
