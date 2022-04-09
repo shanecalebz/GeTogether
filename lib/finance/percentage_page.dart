@@ -116,7 +116,7 @@ class _PercentageInputState extends State<PercentageInput> {
 
     // VALIDATE TOTAL PERCENTAGE
     percentageValidated = false;
-    if (totalPercentage == 100.00) {
+    if (totalPercentage == 100.00 && double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
       percentageValidated = true;
     }
 
@@ -134,7 +134,7 @@ class _PercentageInputState extends State<PercentageInput> {
 
   // This is the TextEditingController which is used to keep track of the change in bill amount
   final _billAmountController =
-      TextEditingController(text: defaultBillAmount.toString());
+      TextEditingController(text: defaultBillAmount.toStringAsFixed(2));
 
   // This is the TextEditingController which is used to keep track of the change in tip percentage
   final _numberOfPeopleController =
@@ -152,6 +152,12 @@ class _PercentageInputState extends State<PercentageInput> {
     setState(() {
       _billAmount = double.tryParse(_billAmountController.text) ?? 0.0;
     });
+
+    // VALIDATE TOTAL PERCENTAGE
+    percentageValidated = false;
+    if (totalPercentage == 100.00 && double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
+      percentageValidated = true;
+    }
   }
 
   _onNumberOfPeopleChanged() {
@@ -368,7 +374,7 @@ class _PercentageInputState extends State<PercentageInput> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: percentageValidated ? Colors.blueAccent : Colors.grey,
+        backgroundColor: percentageValidated ? Color(0XFFFEA828) : Colors.grey,
         label: Text("Submit"),
         onPressed: () {
           if (percentageValidated == true) {
@@ -380,8 +386,10 @@ class _PercentageInputState extends State<PercentageInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] +
-                  "," + (_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2) + ",no,no;";
+              if ((_billAmount * (double.parse(percControllers[i].text)) / 100) > 0.00) {
+                temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] +
+                    "," + (_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2) + ",no,no;";
+              }
             }
             // OWNER ONLY
             for (int i = 0; i < membersList.length; i++) {
@@ -401,9 +409,9 @@ class _PercentageInputState extends State<PercentageInput> {
             widget.goToNotifications();
           } else {
             // SHOW SNACKBAR
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                  "Percentage does not add up to 100%",
+                  totalPercentage == 100.00 ? "Invalid Bill Amount" : "Percentage does not add up to 100%",
                   style: TextStyle(
                     color: Colors.white,
                   )
