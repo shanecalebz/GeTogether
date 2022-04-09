@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getogether/finance/custom_input_page.dart';
+import '../utils/constants.dart';
 import 'widgets.dart';
 import 'reusable_card.dart';
 import 'user_data.dart';
@@ -57,7 +58,9 @@ class _CustomInputState extends State<CustomInput> {
         }
       }
       for (int i = 0; i < myControllers.length; i++) {
-        myControllers[i].addListener(() {calculateTotal();});
+        myControllers[i].addListener(() {
+          calculateTotal();
+        });
       }
 
       isLoading = false;
@@ -86,7 +89,6 @@ class _CustomInputState extends State<CustomInput> {
       }
     }
   }
-
 
   List<TextEditingController> myControllers = [];
   var userData = UserData.getData;
@@ -129,7 +131,8 @@ class _CustomInputState extends State<CustomInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Custom Input (${widget.groupName})'),
+        backgroundColor: Palette.primaryColor,
+        title: Center(child: Text('Custom Input (${widget.groupName})')),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -146,26 +149,27 @@ class _CustomInputState extends State<CustomInput> {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.all(Radius.circular(24.0)),
                 ),
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Bill Amount",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Bill Amount",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text("\$" + totalPrice.toStringAsFixed(2),
-                      style: TextStyle(
-                        fontSize: 18.0,
+                      Text(
+                        "\$" + totalPrice.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ),
+                    ],
+                  ),
+                )),
           ),
 /*          TextField(
             onChanged: (value) {
@@ -197,7 +201,7 @@ class _CustomInputState extends State<CustomInput> {
               ),
             ),
           ),*/
-      /*
+          /*
           Row(
             children: <Widget>[
               Expanded(
@@ -265,7 +269,9 @@ class _CustomInputState extends State<CustomInput> {
                       itemCount: membersListFinal.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: (index == (membersListFinal.length - 1)) ? const EdgeInsets.only(bottom: 80.0) : const EdgeInsets.all(0.0),
+                          padding: (index == (membersListFinal.length - 1))
+                              ? const EdgeInsets.only(bottom: 80.0)
+                              : const EdgeInsets.all(0.0),
                           child: Container(
                             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             height: 135,
@@ -300,9 +306,12 @@ class _CustomInputState extends State<CustomInput> {
                                                       width: 50,
                                                       height: 50,
                                                       child: TextField(
-                                                        keyboardType: TextInputType.number,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
                                                         controller:
-                                                            myControllers[index],
+                                                            myControllers[
+                                                                index],
                                                       ),
                                                     )
                                                   ],
@@ -329,7 +338,11 @@ class _CustomInputState extends State<CustomInput> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: inputValidated ? double.parse(totalPrice.toStringAsFixed(2)) <= 0.00 ? Colors.grey : Color(0XFFFEA828) : Colors.grey,
+        backgroundColor: inputValidated
+            ? double.parse(totalPrice.toStringAsFixed(2)) <= 0.00
+                ? Colors.grey
+                : Color(0XFFFEA828)
+            : Colors.grey,
         label: Text("Submit"),
         onPressed: () {
           if (inputValidated == true) {
@@ -341,15 +354,24 @@ class _CustomInputState extends State<CustomInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              if (double.parse((double.parse(myControllers[i].text)).toStringAsFixed(2)) > 0.00) {
-                temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] + "," +
-                    (double.parse(myControllers[i].text)).toStringAsFixed(2) + ",no,no;";
+              if (double.parse((double.parse(myControllers[i].text))
+                      .toStringAsFixed(2)) >
+                  0.00) {
+                temp += membersListFinal[i]['uid'] +
+                    "," +
+                    membersListFinal[i]['name'] +
+                    "," +
+                    (double.parse(myControllers[i].text)).toStringAsFixed(2) +
+                    ",no,no;";
               }
             }
             // OWNER ONLY
             for (int i = 0; i < membersList.length; i++) {
               if (membersList[i]['uid'] == _auth.currentUser!.uid) {
-                temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
+                temp += membersList[i]['uid'] +
+                    "," +
+                    membersList[i]['name'] +
+                    ",0.00,no,yes";
                 break;
               }
             }
@@ -366,11 +388,14 @@ class _CustomInputState extends State<CustomInput> {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                  negativePresent ? "Amount cannot be negative!" : totalPrice == 0.00 ? "Invalid Bill Amount" : "Bill Amount Too Small!",
+                  negativePresent
+                      ? "Amount cannot be negative!"
+                      : totalPrice == 0.00
+                          ? "Invalid Bill Amount"
+                          : "Bill Amount Too Small!",
                   style: TextStyle(
                     color: Colors.white,
-                  )
-              ),
+                  )),
               duration: Duration(seconds: 3),
               backgroundColor: Color(0XFFFEA828),
             ));

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../utils/constants.dart';
 import 'custom_input_page.dart';
 import 'user_data.dart';
 import 'widgets.dart';
@@ -61,7 +62,9 @@ class _PercentageInputState extends State<PercentageInput> {
 
       for (int i = 0; i < percControllers.length; i++) {
         percControllers[i].text = "0";
-        percControllers[i].addListener(() {checkPercentage();});
+        percControllers[i].addListener(() {
+          checkPercentage();
+        });
       }
 
       isLoading = false;
@@ -94,19 +97,18 @@ class _PercentageInputState extends State<PercentageInput> {
                     color: Colors.white,
                   ),
                 ),
-                Text(
-                    "Invalid Percentage",
+                Text("Invalid Percentage",
                     style: TextStyle(
                       color: Colors.white,
-                    )
-                ),
+                    )),
               ],
             ),
             duration: Duration(seconds: 2),
             backgroundColor: Colors.red,
           ));
           snackBarShown = true;
-          timer = Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
+          timer =
+              Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
             snackBarShown = false;
             timer.cancel();
           });
@@ -116,11 +118,14 @@ class _PercentageInputState extends State<PercentageInput> {
 
     // VALIDATE TOTAL PERCENTAGE
     percentageValidated = false;
-    if (totalPercentage == 100.00 && double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
+    if (totalPercentage == 100.00 &&
+        double.parse(
+                double.parse(_billAmountController.text).toStringAsFixed(2)) >
+            0) {
       percentageValidated = true;
     }
 
-    setState(() { });
+    setState(() {});
   }
 
   List<TextEditingController> percControllers = [];
@@ -155,7 +160,10 @@ class _PercentageInputState extends State<PercentageInput> {
 
     // VALIDATE TOTAL PERCENTAGE
     percentageValidated = false;
-    if (totalPercentage == 100.00 && double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
+    if (totalPercentage == 100.00 &&
+        double.parse(
+                double.parse(_billAmountController.text).toStringAsFixed(2)) >
+            0) {
       percentageValidated = true;
     }
   }
@@ -170,7 +178,8 @@ class _PercentageInputState extends State<PercentageInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Percentage Input (${widget.groupName})'),
+        backgroundColor: Palette.primaryColor,
+        title: Center(child: Text('Percentage Input (${widget.groupName})')),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -227,7 +236,7 @@ class _PercentageInputState extends State<PercentageInput> {
               ),
             ),
           ),*/
-          Row(
+          /*Row(
             children: <Widget>[
               Expanded(
                 child: ReusableCard(
@@ -276,7 +285,7 @@ class _PercentageInputState extends State<PercentageInput> {
                 ),
               ),
             ],
-          ),
+          ),*/
           SizedBox(
             height: 20.0,
           ),
@@ -291,7 +300,9 @@ class _PercentageInputState extends State<PercentageInput> {
                       itemCount: membersListFinal.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: (index == membersListFinal.length - 1) ? const EdgeInsets.only(bottom: 80.0) : const EdgeInsets.only(bottom: 0.0),
+                          padding: (index == membersListFinal.length - 1)
+                              ? const EdgeInsets.only(bottom: 80.0)
+                              : const EdgeInsets.only(bottom: 0.0),
                           child: Container(
                             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             height: 135,
@@ -325,8 +336,11 @@ class _PercentageInputState extends State<PercentageInput> {
                                                       width: 50,
                                                       height: 50,
                                                       child: TextField(
-                                                        textAlign: TextAlign.center,
-                                                        keyboardType: TextInputType.number,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
                                                         controller:
                                                             percControllers[
                                                                 index],
@@ -335,8 +349,10 @@ class _PercentageInputState extends State<PercentageInput> {
                                                     Text(" %"),
                                                     Spacer(),
                                                     Container(
-                                                      margin: EdgeInsets.all(15),
-                                                      padding: EdgeInsets.all(15),
+                                                      margin:
+                                                          EdgeInsets.all(15),
+                                                      padding:
+                                                          EdgeInsets.all(15),
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius:
@@ -344,7 +360,8 @@ class _PercentageInputState extends State<PercentageInput> {
                                                           Radius.circular(15),
                                                         ),
                                                         border: Border.all(
-                                                            color: Colors.white),
+                                                            color:
+                                                                Colors.white),
                                                       ),
                                                       child: Column(
                                                         children: [
@@ -389,15 +406,29 @@ class _PercentageInputState extends State<PercentageInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              if (double.parse((_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2)) > 0.00) {
-                temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] +
-                    "," + (_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2) + ",no,no;";
+              if (double.parse((_billAmount *
+                          (double.parse(percControllers[i].text)) /
+                          100)
+                      .toStringAsFixed(2)) >
+                  0.00) {
+                temp += membersListFinal[i]['uid'] +
+                    "," +
+                    membersListFinal[i]['name'] +
+                    "," +
+                    (_billAmount *
+                            (double.parse(percControllers[i].text)) /
+                            100)
+                        .toStringAsFixed(2) +
+                    ",no,no;";
               }
             }
             // OWNER ONLY
             for (int i = 0; i < membersList.length; i++) {
               if (membersList[i]['uid'] == _auth.currentUser!.uid) {
-                temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
+                temp += membersList[i]['uid'] +
+                    "," +
+                    membersList[i]['name'] +
+                    ",0.00,no,yes";
                 break;
               }
             }
@@ -414,11 +445,14 @@ class _PercentageInputState extends State<PercentageInput> {
             // SHOW SNACKBAR
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                  totalPercentage == 100.00 ? _billAmount < 0.00 ? "Amount cannot be negative!" : "Invalid Bill Amount" : "Percentage does not add up to 100%",
+                  totalPercentage == 100.00
+                      ? _billAmount < 0.00
+                          ? "Amount cannot be negative!"
+                          : "Invalid Bill Amount"
+                      : "Percentage does not add up to 100%",
                   style: TextStyle(
                     color: Colors.white,
-                  )
-              ),
+                  )),
               duration: Duration(seconds: 3),
               backgroundColor: Color(0XFFFEA828),
             ));

@@ -3,6 +3,7 @@ import 'package:getogether/finance/custom_page.dart';
 import 'package:getogether/finance/percentage_page.dart';
 import 'package:getogether/finance/reusable_card.dart';
 import 'package:getogether/finance/constants.dart';
+import '../utils/constants.dart';
 import 'user_data.dart';
 import 'widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,7 +15,10 @@ class EqualInput extends StatefulWidget {
   final String groupChatId, groupName;
   final Function goToNotifications;
   const EqualInput(
-      {required this.groupChatId, required this.groupName, required this.goToNotifications, Key? key})
+      {required this.groupChatId,
+      required this.groupName,
+      required this.goToNotifications,
+      Key? key})
       : super(key: key);
 
   @override
@@ -40,11 +44,7 @@ class _EqualInputState extends State<EqualInput> {
   }
 
   Future getGroupDetails() async {
-    await _firestore
-        .collection('groups')
-        .doc(widget.groupChatId)
-        .get()
-        .then((chatMap) {
+    await _firestore.collection('groups').doc(widget.groupChatId).get().then((chatMap) {
       membersList = chatMap['members'];
       print(membersList);
       isLoading = false;
@@ -62,12 +62,10 @@ class _EqualInputState extends State<EqualInput> {
   static const defaultNumberOfPeople = 1;
 
   // This is the TextEditingController which is used to keep track of the change in bill amount
-  final _billAmountController =
-      TextEditingController(text: defaultBillAmount.toStringAsFixed(2));
+  final _billAmountController = TextEditingController(text: defaultBillAmount.toStringAsFixed(2));
 
   // This is the TextEditingController which is used to keep track of the change in tip percentage
-  final _numberOfPeopleController =
-      TextEditingController(text: defaultNumberOfPeople.toString());
+  final _numberOfPeopleController = TextEditingController(text: defaultNumberOfPeople.toString());
 
   // This stores the latest value of bill amount calculated
   double _billAmount = defaultBillAmount;
@@ -79,7 +77,6 @@ class _EqualInputState extends State<EqualInput> {
 
   _onBillAmountChanged() {
     setState(() {
-
       _billAmount = double.tryParse(_billAmountController.text) ?? 0.0;
 
       // VALIDATE THE AMOUNT
@@ -102,7 +99,8 @@ class _EqualInputState extends State<EqualInput> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Equal Input (${widget.groupName})'),
+        backgroundColor: Palette.primaryColor,
+        title: Center(child: Text('Equal Input (${widget.groupName})')),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -159,7 +157,7 @@ class _EqualInputState extends State<EqualInput> {
               ),
             ),
           ),*/
-          Row(
+          /*Row(
             children: <Widget>[
               Expanded(
                 child: ReusableCard(
@@ -208,7 +206,7 @@ class _EqualInputState extends State<EqualInput> {
                 ),
               ),
             ],
-          ),
+          ),*/
           SizedBox(
             height: 5.0,
           ),
@@ -223,7 +221,9 @@ class _EqualInputState extends State<EqualInput> {
                       itemCount: membersList.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: (index == membersList.length - 1) ? const EdgeInsets.only(bottom: 80.0) : const EdgeInsets.only(bottom: 0.0),
+                          padding: (index == membersList.length - 1)
+                              ? const EdgeInsets.only(bottom: 80.0)
+                              : const EdgeInsets.only(bottom: 0.0),
                           child: Container(
                             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             height: 135,
@@ -251,27 +251,23 @@ class _EqualInputState extends State<EqualInput> {
                                                     SizedBox(
                                                       height: 10,
                                                     ),
-                                                    Text(membersList[index]
-                                                        ['name']),
+                                                    Text(membersList[index]['name']),
                                                     Spacer(),
                                                     Container(
                                                       margin: EdgeInsets.all(15),
                                                       padding: EdgeInsets.all(15),
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
+                                                        borderRadius: BorderRadius.all(
                                                           Radius.circular(15),
                                                         ),
-                                                        border: Border.all(
-                                                            color: Colors.white),
+                                                        border: Border.all(color: Colors.white),
                                                       ),
                                                       child: Column(
                                                         children: [
                                                           AmountText(
                                                             'Amount Payable: \$ ${_getFinalAmount()}',
-                                                            key: Key(
-                                                                'finalAmount'),
+                                                            key: Key('finalAmount'),
                                                           )
                                                         ],
                                                       ),
@@ -302,44 +298,46 @@ class _EqualInputState extends State<EqualInput> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: billAmountValidated ? Color(0XFFFEA828) : Colors.grey,
         label: Text("Submit"),
-        onPressed: () {// CREATE STRING
+        onPressed: () {
+          // CREATE STRING
           String temp = "";
           if (double.parse(_billAmountController.text) <= 0 || billAmountValidated == false) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                  double.parse(_billAmountController.text) <= 0 ? "Invalid Bill Amount" : "Bill Amount Too Small!",
+                  double.parse(_billAmountController.text) <= 0
+                      ? "Invalid Bill Amount"
+                      : "Bill Amount Too Small!",
                   style: TextStyle(
                     color: Colors.white,
-                  )
-              ),
+                  )),
               duration: Duration(seconds: 3),
               backgroundColor: Color(0XFFFEA828),
-            )
-            );
-          }
-        else {
+            ));
+          } else {
             for (int i = 0; i < membersList.length; i++) {
               if (_auth.currentUser?.uid == membersList[i]['uid']) {
-                temp +=
-                    membersList[i]['uid'] + "," + membersList[i]['name'] + "," +
-                        (_billAmount / membersList.length).toStringAsFixed(2) +
-                        ",no,yes";
+                temp += membersList[i]['uid'] +
+                    "," +
+                    membersList[i]['name'] +
+                    "," +
+                    (_billAmount / membersList.length).toStringAsFixed(2) +
+                    ",no,yes";
               } else {
-                temp +=
-                    membersList[i]['uid'] + "," + membersList[i]['name'] + "," +
-                        (_billAmount / membersList.length).toStringAsFixed(2) +
-                        ",no,no";
+                temp += membersList[i]['uid'] +
+                    "," +
+                    membersList[i]['name'] +
+                    "," +
+                    (_billAmount / membersList.length).toStringAsFixed(2) +
+                    ",no,no";
               }
               if (i != (membersList.length - 1)) {
                 temp += ";";
               }
             }
             // APPEND TO FIRESTORE
-            _firestore.collection('notifications').add(
-                {'test': temp, 'eventTime': DateTime
-                    .now()
-                    .millisecondsSinceEpoch
-                    .toString()});
+            _firestore
+                .collection('notifications')
+                .add({'test': temp, 'eventTime': DateTime.now().millisecondsSinceEpoch.toString()});
             Navigator.of(context).pop();
             Navigator.of(context).pop();
             Navigator.of(context).pop();

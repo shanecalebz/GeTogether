@@ -9,6 +9,8 @@ import 'package:getogether/finance/custom_input_page.dart';
 import 'package:getogether/finance/percentage_page.dart';
 import 'package:getogether/finance/custom_page.dart';
 
+import '../utils/constants.dart';
+
 class FinanceFeatureScreen extends StatefulWidget {
   static String id = 'equal_page';
   final String groupChatId, groupName;
@@ -58,7 +60,8 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.groupName),
+          backgroundColor: Palette.primaryColor,
+          title: Center(child: Text(widget.groupName)),
           automaticallyImplyLeading: false,
         ),
         body: Container(
@@ -67,6 +70,9 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
             color: Colors.white,
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                ),
                 TextButton(
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -79,9 +85,15 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                   ),
                   child: Text('Equal Input'),
                   style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 68),
-                      primary: Colors.white,
-                      backgroundColor: Colors.lightBlueAccent),
+                    textStyle: TextStyle(
+                        fontSize: 50,
+                        fontFamily: 'JosefinSans',
+                        fontWeight: FontWeight.bold),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    backgroundColor: Color(0xFFF5F6F9),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -98,9 +110,15 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                   ),
                   child: Text('Custom Input'),
                   style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 68),
-                      primary: Colors.white,
-                      backgroundColor: Colors.lightBlueAccent),
+                    textStyle: TextStyle(
+                        fontSize: 50,
+                        fontFamily: 'JosefinSans',
+                        fontWeight: FontWeight.bold),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    backgroundColor: Color(0xFFF5F6F9),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -116,9 +134,15 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                   ),
                   child: Text('Percentage Input'),
                   style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 68),
-                      primary: Colors.white,
-                      backgroundColor: Colors.lightBlueAccent),
+                    textStyle: TextStyle(
+                        fontSize: 50,
+                        fontFamily: 'JosefinSans',
+                        fontWeight: FontWeight.bold),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    backgroundColor: Color(0xFFF5F6F9),
+                  ),
                 ),
               ],
             )));
