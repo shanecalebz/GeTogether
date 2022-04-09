@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'custom_input_page.dart';
 import 'user_data.dart';
@@ -24,7 +26,10 @@ class PercentageInput extends StatefulWidget {
 
 class _PercentageInputState extends State<PercentageInput> {
   List membersList = [];
+  List membersListFinal = [];
   bool isLoading = true;
+  late Timer timer;
+  bool snackBarShown = false;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -45,23 +50,77 @@ class _PercentageInputState extends State<PercentageInput> {
         .get()
         .then((chatMap) {
       membersList = chatMap['members'];
-      print(membersList);
 
       for (int i = 0; i < membersList.length; i++) {
-        TextEditingController controller = TextEditingController();
-        percControllers.add(controller);
-        percControllers[i].text = "0";
-        if (double.parse(percControllers[i].text) >= 0) {
-          percControllers[i].addListener(() {
-            setState(() {});
-          });
-        } else {
-          percControllers[i].text = "0";
+        if (membersList[i]['uid'] != _auth.currentUser!.uid) {
+          membersListFinal.add(membersList[i]);
+          TextEditingController controller = TextEditingController();
+          percControllers.add(controller);
         }
       }
+
+      for (int i = 0; i < percControllers.length; i++) {
+        percControllers[i].text = "0";
+        percControllers[i].addListener(() {checkPercentage();});
+      }
+
       isLoading = false;
       setState(() {});
     });
+  }
+
+  bool percentageValidated = false;
+  double totalPercentage = 0;
+
+  void checkPercentage() {
+    totalPercentage = 0;
+    for (int i = 0; i < percControllers.length; i++) {
+      totalPercentage += double.parse(percControllers[i].text);
+    }
+
+    // ENSURE USER INPUT DOES NOT EXCEED 100%
+    for (int i = 0; i < percControllers.length; i++) {
+      if (double.parse(percControllers[i].text) > 100.00) {
+        if (snackBarShown == false) {
+          // SHOW SNACKBAR
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    Icons.warning,
+                    size: 14.0,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                    "Invalid Percentage",
+                    style: TextStyle(
+                      color: Colors.white,
+                    )
+                ),
+              ],
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.red,
+          ));
+          snackBarShown = true;
+          timer = Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
+            snackBarShown = false;
+            timer.cancel();
+          });
+        }
+      }
+    }
+
+    // VALIDATE TOTAL PERCENTAGE
+    percentageValidated = false;
+    if (totalPercentage == 100.00) {
+      percentageValidated = true;
+    }
+
+    setState(() { });
   }
 
   List<TextEditingController> percControllers = [];
@@ -223,7 +282,7 @@ class _PercentageInputState extends State<PercentageInput> {
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
-                      itemCount: membersList.length,
+                      itemCount: membersListFinal.length,
                       itemBuilder: (context, index) {
                         return Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -251,18 +310,21 @@ class _PercentageInputState extends State<PercentageInput> {
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Text(membersList[index]
+                                                  Text(membersListFinal[index]
                                                       ['name']),
                                                   Spacer(),
                                                   SizedBox(
                                                     width: 50,
                                                     height: 50,
                                                     child: TextField(
+                                                      textAlign: TextAlign.center,
+                                                      keyboardType: TextInputType.number,
                                                       controller:
                                                           percControllers[
                                                               index],
                                                     ),
                                                   ),
+                                                  Text(" %"),
                                                   Spacer(),
                                                   Container(
                                                     margin: EdgeInsets.all(15),
@@ -306,47 +368,50 @@ class _PercentageInputState extends State<PercentageInput> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: percentageValidated ? Colors.blueAccent : Colors.grey,
         label: Text("Submit"),
         onPressed: () {
-          /*for (int i = 0; i < membersList.length; i++) {
+          if (percentageValidated == true) {
+            /*for (int i = 0; i < membersListFinal.length; i++) {
             print(
-                "${membersList[i]['name']} pays \$${_billAmount * (double.parse(percControllers[i].text)) / 100}.");
+                "${membersListFinal[i]['name']} pays \$${_billAmount * (double.parse(percControllers[i].text)) / 100}.");
           }*/
 
-          // CREATE STRING
-          String temp = "";
-          for (int i = 0; i < membersList.length; i++) {
-            if (_auth.currentUser?.uid == membersList[i]['uid']) {
-              temp += membersList[i]['uid'] +
-                  "," +
-                  membersList[i]['name'] +
-                  "," +
-                  (_billAmount * (double.parse(percControllers[i].text)) / 100)
-                      .toStringAsFixed(2) +
-                  ",no,yes";
-            } else {
-              temp += membersList[i]['uid'] +
-                  "," +
-                  membersList[i]['name'] +
-                  "," +
-                  (_billAmount * (double.parse(percControllers[i].text)) / 100)
-                      .toStringAsFixed(2) +
-                  ",no,no";
+            // CREATE STRING
+            String temp = "";
+            for (int i = 0; i < membersListFinal.length; i++) {
+              temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] +
+                  "," + (_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2) + ",no,no;";
             }
-            if (i != (membersList.length - 1)) {
-              temp += ";";
+            // OWNER ONLY
+            for (int i = 0; i < membersList.length; i++) {
+              if (membersList[i]['uid'] == _auth.currentUser!.uid) {
+                temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
+                break;
+              }
             }
+            // APPEND TO FIRESTORE
+            _firestore.collection('notifications').add({
+              'test': temp,
+              'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
+            });
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            widget.goToNotifications();
+          } else {
+            // SHOW SNACKBAR
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                  "Percentage does not add up to 100%",
+                  style: TextStyle(
+                    color: Colors.white,
+                  )
+              ),
+              duration: Duration(seconds: 3),
+              backgroundColor: Color(0XFFFEA828),
+            ));
           }
-          // APPEND TO FIRESTORE
-          _firestore.collection('notifications').add({
-            'test': temp,
-            'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
-          });
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-          widget.goToNotifications();
         },
         tooltip: "Create Group",
       ),
@@ -376,7 +441,7 @@ class _PercentageInputState extends State<PercentageInput> {
     for (int i = 0; i < percControllers.length; i++) {
       percControllers[i].dispose();
     }
-
+    timer.cancel();
     super.dispose();
   }
 }

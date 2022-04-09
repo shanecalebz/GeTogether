@@ -282,6 +282,7 @@ class _CustomInputState extends State<CustomInput> {
                                                     Text(membersListFinal[index]
                                                         ['name']),
                                                     Spacer(),
+                                                    Text('\$ '),
                                                     SizedBox(
                                                       width: 50,
                                                       height: 50,

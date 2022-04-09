@@ -13,11 +13,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int count = 0;
   int index = 0;
+  int sortIndex = 0;
   late int checkBoxValueIndex;
   late bool onlyOwner;
   late Timer timer;
   bool currentUserInGroup = false;
   List<String> userList = [];
+  List<String> eventTime = [];
+  List<String> sortedUserList = [];
   List<String> checkBoxValue = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,8 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void getNotifications() {
     userList.clear();
+    eventTime.clear();
     checkBoxValue.clear();
     index = 0;
+    sortIndex = 0;
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     _firestore.collection('notifications').get().then((value) => value.docs.forEach((element) {
       // CHECK IF CURRENT USER EXISTS IN NOTIFICATION
@@ -56,13 +61,21 @@ class _HomeScreenState extends State<HomeScreen> {
       if (currentUserInGroup == true) {
         for (String users in element.data()['test'].split(';')) {
           setState(() {
+            eventTime.add(element.data()['eventTime'] + "," + sortIndex.toString());
             userList.add(index.toString() + "," + users + "," + element.id + "," + element.data()['eventTime']);
             if (_auth.currentUser!.uid == userList.last.split(',')[1] && userList.last.split(',')[5] == "no" && userList.last.split(',')[4] == "no") {
               checkBoxValue.add((userList.length - 1).toString() + ",false");
             }
+            sortIndex++;
           });
         }
         index++;
+      }
+
+      sortedUserList.clear();
+      eventTime.sort((a,b) => b.compareTo(a));
+      for (int i = 0; i < eventTime.length; i++) {
+        sortedUserList.add(userList[int.parse(eventTime[i].split(',')[1])]);
       }
     }));
   }
@@ -91,11 +104,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onChanged: (value) async {
             // UPDATE FIRESTORE
             String temp = "";
-            for (int z = 0; z < userList.length; z++) {
-              if (userList[z].split(',')[0] == userList[j].split(',')[0]) {
-                if (_auth.currentUser!.uid != userList[z].split(',')[1]) {
-                  temp += userList[z].split(',')[1] + "," + userList[z].split(',')[2] + "," + userList[z].split(',')[3] + "," +
-                      userList[z].split(',')[4] + "," + userList[z].split(',')[5] + ";";
+            for (int z = 0; z < sortedUserList.length; z++) {
+              if (sortedUserList[z].split(',')[0] == sortedUserList[j].split(',')[0]) {
+                if (_auth.currentUser!.uid != sortedUserList[z].split(',')[1]) {
+                  temp += sortedUserList[z].split(',')[1] + "," + sortedUserList[z].split(',')[2] + "," + sortedUserList[z].split(',')[3] + "," +
+                      sortedUserList[z].split(',')[4] + "," + sortedUserList[z].split(',')[5] + ";";
                 }
               }
             }
@@ -111,10 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (onlyOwner == true) {
               // DELETE DOCUMENT
-              await _firestore.collection('notifications').doc(userList[j].split(',')[6]).delete();
+              await _firestore.collection('notifications').doc(sortedUserList[j].split(',')[6]).delete();
             } else {
               // UPDATE DOCUMENT
-              await _firestore.collection('notifications').doc(userList[j].split(',')[6]).update({'test': temp});
+              await _firestore.collection('notifications').doc(sortedUserList[j].split(',')[6]).update({'test': temp});
             }
 
             // SHOW SNACKBAR
@@ -150,10 +163,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildYouOwe() {
 
     count = 0;
-    for (int j = 0; j < userList.length; j++) {
-      if (_auth.currentUser!.uid == userList[j].split(',')[1] && userList[j].split(',')[5] == "no" && userList[j].split(',')[4] == "no") {
-        for (int i = 0; i < userList.length; i++) {
-          if (userList[i].split(',')[0] == userList[j].split(',')[0] && userList[i].split(',')[5] == "yes") {
+    for (int j = 0; j < sortedUserList.length; j++) {
+      if (_auth.currentUser!.uid == sortedUserList[j].split(',')[1] && sortedUserList[j].split(',')[5] == "no" && sortedUserList[j].split(',')[4] == "no") {
+        for (int i = 0; i < sortedUserList.length; i++) {
+          if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "yes") {
             count++;
           }
         }
@@ -174,8 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 8.0,
               ),
-              for (int j = 0; j < userList.length; j++)
-                if (_auth.currentUser!.uid == userList[j].split(',')[1] && userList[j].split(',')[5] == "no" && userList[j].split(',')[4] == "no")
+              for (int j = 0; j < sortedUserList.length; j++)
+                if (_auth.currentUser!.uid == sortedUserList[j].split(',')[1] && sortedUserList[j].split(',')[5] == "no" && sortedUserList[j].split(',')[4] == "no")
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Container(
@@ -191,25 +204,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                for (int i = 0; i < userList.length; i++)
-                                  if (userList[i].split(',')[0] == userList[j].split(',')[0] && userList[i].split(',')[5] == "yes")
+                                for (int i = 0; i < sortedUserList.length; i++)
+                                  if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "yes")
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          userList[i].split(',')[2],
+                                          sortedUserList[i].split(',')[2],
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text(DateFormat('dd MMM yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(userList[i].split(',')[7].toString())))),
+                                        Text(DateFormat('dd MMM yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(sortedUserList[i].split(',')[7].toString())))),
                                       ],
                                     ),
                                 Row(
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(right: 10.0),
-                                      child: Text("\$" + userList[j].split(',')[3]),
+                                      child: Text("\$" + sortedUserList[j].split(',')[3]),
                                     ),
                                     SizedBox(
                                       width: 20.0,
@@ -235,10 +248,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildTheyOwe() {
 
     count = 0;
-    for (int j = 0; j < userList.length; j++) {
-      if (_auth.currentUser!.uid == userList[j].split(',')[1] && userList[j].split(',')[5] == "yes" && userList[j].split(',')[4] == "no") {
-        for (int i = 0; i < userList.length; i++) {
-          if (userList[i].split(',')[0] == userList[j].split(',')[0] && userList[i].split(',')[5] == "no") {
+    for (int j = 0; j < sortedUserList.length; j++) {
+      if (_auth.currentUser!.uid == sortedUserList[j].split(',')[1] && sortedUserList[j].split(',')[5] == "yes" && sortedUserList[j].split(',')[4] == "no") {
+        for (int i = 0; i < sortedUserList.length; i++) {
+          if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "no") {
             count++;
           }
         }
@@ -259,13 +272,13 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 8.0,
               ),
-              for (int j = 0; j < userList.length; j++)
-                if (_auth.currentUser!.uid == userList[j].split(',')[1] && userList[j].split(',')[5] == "yes" && userList[j].split(',')[4] == "no")
+              for (int j = 0; j < sortedUserList.length; j++)
+                if (_auth.currentUser!.uid == sortedUserList[j].split(',')[1] && sortedUserList[j].split(',')[5] == "yes" && sortedUserList[j].split(',')[4] == "no")
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (int i = 0; i < userList.length; i++)
-                        if (userList[i].split(',')[0] == userList[j].split(',')[0] && userList[i].split(',')[5] == "no")
+                      for (int i = 0; i < sortedUserList.length; i++)
+                        if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "no")
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Container(
@@ -282,15 +295,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            userList[i].split(',')[2],
+                                            sortedUserList[i].split(',')[2],
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          Text(DateFormat('dd MMM yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(userList[i].split(',')[7].toString())))),
+                                          Text(DateFormat('dd MMM yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(sortedUserList[i].split(',')[7].toString())))),
                                         ],
                                       ),
-                                      Text("\$" + userList[i].split(',')[3]),
+                                      Text("\$" + sortedUserList[i].split(',')[3]),
                                     ],
                                   ),
                                 )
