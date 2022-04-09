@@ -100,7 +100,7 @@ class _EqualInputState extends State<EqualInput> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.primaryColor,
-        title: Center(child: Text('Equal Input (${widget.groupName})')),
+        title: Text('Equal Input (${widget.groupName})'),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,

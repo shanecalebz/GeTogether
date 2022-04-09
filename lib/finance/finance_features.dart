@@ -41,12 +41,7 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
   void getAvailableGroups() async {
     String uid = _auth.currentUser!.uid;
 
-    await _firestore
-        .collection('users')
-        .doc(uid)
-        .collection('groups')
-        .get()
-        .then((value) {
+    await _firestore.collection('users').doc(uid).collection('groups').get().then((value) {
       setState(() {
         groupList = value.docs;
         isLoading = false;
@@ -61,8 +56,8 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Palette.primaryColor,
-          title: Center(child: Text(widget.groupName)),
-          automaticallyImplyLeading: false,
+          title: Text(widget.groupName),
+          //automaticallyImplyLeading: false,
         ),
         body: Container(
             height: size.height,
@@ -86,12 +81,9 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                   child: Text('Equal Input'),
                   style: TextButton.styleFrom(
                     textStyle: TextStyle(
-                        fontSize: 50,
-                        fontFamily: 'JosefinSans',
-                        fontWeight: FontWeight.bold),
+                        fontSize: 50, fontFamily: 'JosefinSans', fontWeight: FontWeight.bold),
                     padding: EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     backgroundColor: Color(0xFFF5F6F9),
                   ),
                 ),
@@ -111,12 +103,9 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                   child: Text('Custom Input'),
                   style: TextButton.styleFrom(
                     textStyle: TextStyle(
-                        fontSize: 50,
-                        fontFamily: 'JosefinSans',
-                        fontWeight: FontWeight.bold),
+                        fontSize: 50, fontFamily: 'JosefinSans', fontWeight: FontWeight.bold),
                     padding: EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     backgroundColor: Color(0xFFF5F6F9),
                   ),
                 ),
@@ -135,12 +124,9 @@ class _FinanceFeatureScreenState extends State<FinanceFeatureScreen> {
                   child: Text('Percentage Input'),
                   style: TextButton.styleFrom(
                     textStyle: TextStyle(
-                        fontSize: 50,
-                        fontFamily: 'JosefinSans',
-                        fontWeight: FontWeight.bold),
+                        fontSize: 50, fontFamily: 'JosefinSans', fontWeight: FontWeight.bold),
                     padding: EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     backgroundColor: Color(0xFFF5F6F9),
                   ),
                 ),

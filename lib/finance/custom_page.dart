@@ -43,11 +43,7 @@ class _CustomInputState extends State<CustomInput> {
   }
 
   Future getGroupDetails() async {
-    await _firestore
-        .collection('groups')
-        .doc(widget.groupChatId)
-        .get()
-        .then((chatMap) {
+    await _firestore.collection('groups').doc(widget.groupChatId).get().then((chatMap) {
       membersList = chatMap['members'];
 
       for (int i = 0; i < membersList.length; i++) {
@@ -100,12 +96,10 @@ class _CustomInputState extends State<CustomInput> {
   static const defaultNumberOfPeople = 1;
 
   // This is the TextEditingController which is used to keep track of the change in bill amount
-  final _billAmountController =
-      TextEditingController(text: defaultBillAmount.toString());
+  final _billAmountController = TextEditingController(text: defaultBillAmount.toString());
 
   // This is the TextEditingController which is used to keep track of the change in tip percentage
-  final _numberOfPeopleController =
-      TextEditingController(text: defaultNumberOfPeople.toString());
+  final _numberOfPeopleController = TextEditingController(text: defaultNumberOfPeople.toString());
 
   // This stores the latest value of bill amount calculated
   double _billAmount = defaultBillAmount;
@@ -132,7 +126,7 @@ class _CustomInputState extends State<CustomInput> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.primaryColor,
-        title: Center(child: Text('Custom Input (${widget.groupName})')),
+        title: Text('Custom Input (${widget.groupName})'),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -298,20 +292,15 @@ class _CustomInputState extends State<CustomInput> {
                                                     SizedBox(
                                                       height: 10,
                                                     ),
-                                                    Text(membersListFinal[index]
-                                                        ['name']),
+                                                    Text(membersListFinal[index]['name']),
                                                     Spacer(),
                                                     Text('\$ '),
                                                     SizedBox(
                                                       width: 50,
                                                       height: 50,
                                                       child: TextField(
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        controller:
-                                                            myControllers[
-                                                                index],
+                                                        keyboardType: TextInputType.number,
+                                                        controller: myControllers[index],
                                                       ),
                                                     )
                                                   ],
@@ -354,9 +343,7 @@ class _CustomInputState extends State<CustomInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              if (double.parse((double.parse(myControllers[i].text))
-                      .toStringAsFixed(2)) >
-                  0.00) {
+              if (double.parse((double.parse(myControllers[i].text)).toStringAsFixed(2)) > 0.00) {
                 temp += membersListFinal[i]['uid'] +
                     "," +
                     membersListFinal[i]['name'] +
@@ -368,19 +355,15 @@ class _CustomInputState extends State<CustomInput> {
             // OWNER ONLY
             for (int i = 0; i < membersList.length; i++) {
               if (membersList[i]['uid'] == _auth.currentUser!.uid) {
-                temp += membersList[i]['uid'] +
-                    "," +
-                    membersList[i]['name'] +
-                    ",0.00,no,yes";
+                temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
                 break;
               }
             }
 
             // APPEND TO FIRESTORE
-            _firestore.collection('notifications').add({
-              'test': temp,
-              'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
-            });
+            _firestore
+                .collection('notifications')
+                .add({'test': temp, 'eventTime': DateTime.now().millisecondsSinceEpoch.toString()});
             Navigator.of(context).pop();
             Navigator.of(context).pop();
             Navigator.of(context).pop();

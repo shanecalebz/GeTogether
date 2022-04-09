@@ -45,11 +45,7 @@ class _PercentageInputState extends State<PercentageInput> {
   }
 
   Future getGroupDetails() async {
-    await _firestore
-        .collection('groups')
-        .doc(widget.groupChatId)
-        .get()
-        .then((chatMap) {
+    await _firestore.collection('groups').doc(widget.groupChatId).get().then((chatMap) {
       membersList = chatMap['members'];
 
       for (int i = 0; i < membersList.length; i++) {
@@ -107,8 +103,7 @@ class _PercentageInputState extends State<PercentageInput> {
             backgroundColor: Colors.red,
           ));
           snackBarShown = true;
-          timer =
-              Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
+          timer = Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
             snackBarShown = false;
             timer.cancel();
           });
@@ -119,9 +114,7 @@ class _PercentageInputState extends State<PercentageInput> {
     // VALIDATE TOTAL PERCENTAGE
     percentageValidated = false;
     if (totalPercentage == 100.00 &&
-        double.parse(
-                double.parse(_billAmountController.text).toStringAsFixed(2)) >
-            0) {
+        double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
       percentageValidated = true;
     }
 
@@ -138,12 +131,10 @@ class _PercentageInputState extends State<PercentageInput> {
   static const defaultNumberOfPeople = 1;
 
   // This is the TextEditingController which is used to keep track of the change in bill amount
-  final _billAmountController =
-      TextEditingController(text: defaultBillAmount.toStringAsFixed(2));
+  final _billAmountController = TextEditingController(text: defaultBillAmount.toStringAsFixed(2));
 
   // This is the TextEditingController which is used to keep track of the change in tip percentage
-  final _numberOfPeopleController =
-      TextEditingController(text: defaultNumberOfPeople.toString());
+  final _numberOfPeopleController = TextEditingController(text: defaultNumberOfPeople.toString());
 
   // This stores the latest value of bill amount calculated
   double _billAmount = defaultBillAmount;
@@ -161,9 +152,7 @@ class _PercentageInputState extends State<PercentageInput> {
     // VALIDATE TOTAL PERCENTAGE
     percentageValidated = false;
     if (totalPercentage == 100.00 &&
-        double.parse(
-                double.parse(_billAmountController.text).toStringAsFixed(2)) >
-            0) {
+        double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
       percentageValidated = true;
     }
   }
@@ -179,7 +168,7 @@ class _PercentageInputState extends State<PercentageInput> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.primaryColor,
-        title: Center(child: Text('Percentage Input (${widget.groupName})')),
+        title: Text('Percentage Input (${widget.groupName})'),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -329,44 +318,32 @@ class _PercentageInputState extends State<PercentageInput> {
                                                     SizedBox(
                                                       height: 10,
                                                     ),
-                                                    Text(membersListFinal[index]
-                                                        ['name']),
+                                                    Text(membersListFinal[index]['name']),
                                                     Spacer(),
                                                     SizedBox(
                                                       width: 50,
                                                       height: 50,
                                                       child: TextField(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        controller:
-                                                            percControllers[
-                                                                index],
+                                                        textAlign: TextAlign.center,
+                                                        keyboardType: TextInputType.number,
+                                                        controller: percControllers[index],
                                                       ),
                                                     ),
                                                     Text(" %"),
                                                     Spacer(),
                                                     Container(
-                                                      margin:
-                                                          EdgeInsets.all(15),
-                                                      padding:
-                                                          EdgeInsets.all(15),
+                                                      margin: EdgeInsets.all(15),
+                                                      padding: EdgeInsets.all(15),
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
+                                                        borderRadius: BorderRadius.all(
                                                           Radius.circular(15),
                                                         ),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.white),
+                                                        border: Border.all(color: Colors.white),
                                                       ),
                                                       child: Column(
                                                         children: [
-                                                          calculateFinalAmount(
-                                                              index),
+                                                          calculateFinalAmount(index),
                                                         ],
                                                       ),
                                                     )
@@ -406,18 +383,14 @@ class _PercentageInputState extends State<PercentageInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              if (double.parse((_billAmount *
-                          (double.parse(percControllers[i].text)) /
-                          100)
+              if (double.parse((_billAmount * (double.parse(percControllers[i].text)) / 100)
                       .toStringAsFixed(2)) >
                   0.00) {
                 temp += membersListFinal[i]['uid'] +
                     "," +
                     membersListFinal[i]['name'] +
                     "," +
-                    (_billAmount *
-                            (double.parse(percControllers[i].text)) /
-                            100)
+                    (_billAmount * (double.parse(percControllers[i].text)) / 100)
                         .toStringAsFixed(2) +
                     ",no,no;";
               }
@@ -425,18 +398,14 @@ class _PercentageInputState extends State<PercentageInput> {
             // OWNER ONLY
             for (int i = 0; i < membersList.length; i++) {
               if (membersList[i]['uid'] == _auth.currentUser!.uid) {
-                temp += membersList[i]['uid'] +
-                    "," +
-                    membersList[i]['name'] +
-                    ",0.00,no,yes";
+                temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
                 break;
               }
             }
             // APPEND TO FIRESTORE
-            _firestore.collection('notifications').add({
-              'test': temp,
-              'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
-            });
+            _firestore
+                .collection('notifications')
+                .add({'test': temp, 'eventTime': DateTime.now().millisecondsSinceEpoch.toString()});
             Navigator.of(context).pop();
             Navigator.of(context).pop();
             Navigator.of(context).pop();
