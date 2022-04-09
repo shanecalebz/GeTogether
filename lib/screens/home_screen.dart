@@ -63,9 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             eventTime.add(element.data()['eventTime'] + "," + sortIndex.toString());
             userList.add(index.toString() + "," + users + "," + element.id + "," + element.data()['eventTime']);
-            if (_auth.currentUser!.uid == userList.last.split(',')[1] && userList.last.split(',')[5] == "no" && userList.last.split(',')[4] == "no") {
-              checkBoxValue.add((userList.length - 1).toString() + ",false");
-            }
             sortIndex++;
           });
         }
@@ -76,6 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
       eventTime.sort((a,b) => b.compareTo(a));
       for (int i = 0; i < eventTime.length; i++) {
         sortedUserList.add(userList[int.parse(eventTime[i].split(',')[1])]);
+        if (_auth.currentUser!.uid == sortedUserList.last.split(',')[1] && sortedUserList.last.split(',')[5] == "no" && sortedUserList.last.split(',')[4] == "no") {
+          checkBoxValue.add((sortedUserList.length - 1).toString() + ",false");
+        }
       }
     }));
   }

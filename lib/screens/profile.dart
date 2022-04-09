@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:getogether/utils/profile_pic.dart';
+import '../utils/constants.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -11,64 +13,110 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late final TextEditingController _username = TextEditingController();
+  final TextEditingController _bio = TextEditingController();
+  String currentUserName = "";
+  String currentUserBio = "";
+
+  void getUserInfo() async {
+    await _firestore
+        .collection('users')
+        .where("email", isEqualTo: _auth.currentUser!.email)
+        .get()
+        .then((value) {
+      setState(() {
+        currentUserName = value.docs[0].data()['name'];
+        _username.text = currentUserName;
+        if (value.docs[0].data()['bio'] != null || value.docs[0].data()['bio'].toString().isNotEmpty) {
+          currentUserBio = value.docs[0].data()['bio'];
+          _bio.text = currentUserBio;
+        } else {
+          currentUserBio = "Add a bio!";
+        }
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 25, 10, 5),
-                    child: CircleAvatar(
-                        radius: 80,
-                        backgroundImage:
-                            NetworkImage("${_auth.currentUser?.photoURL}")),
-                  ),
-                  Text(
-                      "Hi ${_auth.currentUser?.displayName ?? 'nice to see you here.'}"),
-                ],
+      appBar: AppBar(
+        title: Center(child: Text("GeTogether")),
+        backgroundColor: Palette.primaryColor,
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: <Widget>[
+            ProfilePic(),
+            Text(currentUserName,
+                style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)),
+            SizedBox(height: 10),
+            Divider(
+              thickness: 2,
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: "Username :",
+                    labelStyle:
+                    TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    hintText: currentUserName),
+                controller: _username,
               ),
             ),
-          ),
-          Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Profile Name :"),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      decoration: InputDecoration(hintText: "About me:"),
-                    ),
-                    SizedBox(height: 20.0),
-                    RaisedButton(
-                      onPressed: () => _firestore
-                          .collection('users')
-                          .doc(_auth.currentUser?.uid)
-                          .update({'bio': "ENTER STRING HERE"}),
-                      child: Text("Save Profile"),
-                    )
-                  ],
-                ),
-              ))
-        ],
+            SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    labelText: "Bio:",
+                    labelStyle:
+                    TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    hintText: currentUserBio),
+                controller: _bio,
+              ),
+            ),
+            SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: RaisedButton(
+                color: Colors.white,
+                splashColor: Colors.grey.shade50,
+                onPressed: () {
+                  // UPDATE FIRESTORE
+                  _firestore
+                      .collection('users')
+                      .doc(_auth.currentUser?.uid)
+                      .update({'name': "${_username.text}"});
+                  _firestore
+                      .collection('users')
+                      .doc(_auth.currentUser?.uid)
+                      .update({'bio': "${_bio.text}"});
+
+                  // UPDATE AUTHENTICATION PROFILE
+                  _auth.currentUser?.updateDisplayName(_username.text);
+                  Navigator.pop(context);
+                },
+                child: Text("Save Profile"),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
