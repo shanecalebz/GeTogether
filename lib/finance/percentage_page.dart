@@ -290,76 +290,79 @@ class _PercentageInputState extends State<PercentageInput> {
                     child: ListView.builder(
                       itemCount: membersListFinal.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          height: 135,
-                          width: double.maxFinite,
-                          child: Card(
-                            elevation: 5,
-                            child: Padding(
-                              padding: EdgeInsets.all(7.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 10,
-                                            top: 5,
-                                          ),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Row(
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(membersListFinal[index]
-                                                      ['name']),
-                                                  Spacer(),
-                                                  SizedBox(
-                                                    width: 50,
-                                                    height: 50,
-                                                    child: TextField(
-                                                      textAlign: TextAlign.center,
-                                                      keyboardType: TextInputType.number,
-                                                      controller:
-                                                          percControllers[
-                                                              index],
+                        return Padding(
+                          padding: (index == membersListFinal.length - 1) ? const EdgeInsets.only(bottom: 80.0) : const EdgeInsets.only(bottom: 0.0),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            height: 135,
+                            width: double.maxFinite,
+                            child: Card(
+                              elevation: 5,
+                              child: Padding(
+                                padding: EdgeInsets.all(7.0),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                              top: 5,
+                                            ),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      height: 10,
                                                     ),
-                                                  ),
-                                                  Text(" %"),
-                                                  Spacer(),
-                                                  Container(
-                                                    margin: EdgeInsets.all(15),
-                                                    padding: EdgeInsets.all(15),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(15),
+                                                    Text(membersListFinal[index]
+                                                        ['name']),
+                                                    Spacer(),
+                                                    SizedBox(
+                                                      width: 50,
+                                                      height: 50,
+                                                      child: TextField(
+                                                        textAlign: TextAlign.center,
+                                                        keyboardType: TextInputType.number,
+                                                        controller:
+                                                            percControllers[
+                                                                index],
                                                       ),
-                                                      border: Border.all(
-                                                          color: Colors.white),
                                                     ),
-                                                    child: Column(
-                                                      children: [
-                                                        calculateFinalAmount(
-                                                            index),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                                    Text(" %"),
+                                                    Spacer(),
+                                                    Container(
+                                                      margin: EdgeInsets.all(15),
+                                                      padding: EdgeInsets.all(15),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                          Radius.circular(15),
+                                                        ),
+                                                        border: Border.all(
+                                                            color: Colors.white),
+                                                      ),
+                                                      child: Column(
+                                                        children: [
+                                                          calculateFinalAmount(
+                                                              index),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -386,7 +389,7 @@ class _PercentageInputState extends State<PercentageInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              if ((_billAmount * (double.parse(percControllers[i].text)) / 100) > 0.00) {
+              if (double.parse((_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2)) > 0.00) {
                 temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] +
                     "," + (_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2) + ",no,no;";
               }
@@ -411,7 +414,7 @@ class _PercentageInputState extends State<PercentageInput> {
             // SHOW SNACKBAR
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                  totalPercentage == 100.00 ? "Invalid Bill Amount" : "Percentage does not add up to 100%",
+                  totalPercentage == 100.00 ? _billAmount < 0.00 ? "Amount cannot be negative!" : "Invalid Bill Amount" : "Percentage does not add up to 100%",
                   style: TextStyle(
                     color: Colors.white,
                   )

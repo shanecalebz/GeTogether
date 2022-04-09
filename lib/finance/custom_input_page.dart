@@ -80,15 +80,15 @@ class _EqualInputState extends State<EqualInput> {
   _onBillAmountChanged() {
     setState(() {
 
+      _billAmount = double.tryParse(_billAmountController.text) ?? 0.0;
+
       // VALIDATE THE AMOUNT
       billAmountValidated = false;
       if (_billAmountController.text.isNotEmpty) {
-        if (double.parse(_billAmountController.text) > 0.00) {
+        if (double.parse((_billAmount / membersList.length).toStringAsFixed(2)) > 0.00) {
           billAmountValidated = true;
         }
       }
-
-      _billAmount = double.tryParse(_billAmountController.text) ?? 0.0;
     });
   }
 
@@ -222,67 +222,70 @@ class _EqualInputState extends State<EqualInput> {
                     child: ListView.builder(
                       itemCount: membersList.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          height: 135,
-                          width: double.maxFinite,
-                          child: Card(
-                            elevation: 5,
-                            child: Padding(
-                              padding: EdgeInsets.all(7.0),
-                              child: Stack(
-                                children: <Widget>[
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 10,
-                                            top: 5,
-                                          ),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Row(
-                                                children: <Widget>[
-                                                  //userIcon(userData[index]),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(membersList[index]
-                                                      ['name']),
-                                                  Spacer(),
-                                                  Container(
-                                                    margin: EdgeInsets.all(15),
-                                                    padding: EdgeInsets.all(15),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(15),
+                        return Padding(
+                          padding: (index == membersList.length - 1) ? const EdgeInsets.only(bottom: 80.0) : const EdgeInsets.only(bottom: 0.0),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            height: 135,
+                            width: double.maxFinite,
+                            child: Card(
+                              elevation: 5,
+                              child: Padding(
+                                padding: EdgeInsets.all(7.0),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                              top: 5,
+                                            ),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    //userIcon(userData[index]),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(membersList[index]
+                                                        ['name']),
+                                                    Spacer(),
+                                                    Container(
+                                                      margin: EdgeInsets.all(15),
+                                                      padding: EdgeInsets.all(15),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                          Radius.circular(15),
+                                                        ),
+                                                        border: Border.all(
+                                                            color: Colors.white),
                                                       ),
-                                                      border: Border.all(
-                                                          color: Colors.white),
-                                                    ),
-                                                    child: Column(
-                                                      children: [
-                                                        AmountText(
-                                                          'Amount Payable: \$ ${_getFinalAmount()}',
-                                                          key: Key(
-                                                              'finalAmount'),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                                      child: Column(
+                                                        children: [
+                                                          AmountText(
+                                                            'Amount Payable: \$ ${_getFinalAmount()}',
+                                                            key: Key(
+                                                                'finalAmount'),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -301,10 +304,10 @@ class _EqualInputState extends State<EqualInput> {
         label: Text("Submit"),
         onPressed: () {// CREATE STRING
           String temp = "";
-          if (_billAmount == 0 || _billAmount < 0) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          if (double.parse(_billAmountController.text) <= 0 || billAmountValidated == false) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                  "Invalid Bill Amount",
+                  double.parse(_billAmountController.text) <= 0 ? "Invalid Bill Amount" : "Bill Amount Too Small!",
                   style: TextStyle(
                     color: Colors.white,
                   )

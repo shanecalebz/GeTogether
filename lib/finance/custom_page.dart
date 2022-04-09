@@ -26,6 +26,8 @@ class _CustomInputState extends State<CustomInput> {
   List membersList = [];
   List membersListFinal = [];
   bool isLoading = true;
+  bool negativePresent = false;
+  bool inputValidated = false;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -67,10 +69,21 @@ class _CustomInputState extends State<CustomInput> {
 
   void calculateTotal() {
     totalPrice = 0;
+    negativePresent = false;
     for (int i = 0; i < myControllers.length; i++) {
+      if (double.parse(myControllers[i].text) < 0.00) {
+        negativePresent = true;
+      }
       setState(() {
         totalPrice += double.parse(myControllers[i].text);
       });
+    }
+
+    inputValidated = false;
+    if (double.parse(totalPrice.toStringAsFixed(2)) > 0.00) {
+      if (negativePresent == false) {
+        inputValidated = true;
+      }
     }
   }
 
@@ -316,37 +329,52 @@ class _CustomInputState extends State<CustomInput> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: inputValidated ? double.parse(totalPrice.toStringAsFixed(2)) <= 0.00 ? Colors.grey : Color(0XFFFEA828) : Colors.grey,
         label: Text("Submit"),
         onPressed: () {
-          /*for (int i = 0; i < membersListFinal.length; i++) {
+          if (inputValidated == true) {
+            /*for (int i = 0; i < membersListFinal.length; i++) {
             print(
                 "${membersListFinal[i]['name']} pays \$${(double.parse(myControllers[i].text)).toStringAsFixed(2)}.");
           }*/
 
-          // CREATE STRING
-          String temp = "";
-          for (int i = 0; i < membersListFinal.length; i++) {
-            temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] + "," +
-                (double.parse(myControllers[i].text)).toStringAsFixed(2) + ",no,no;";
-          }
-          // OWNER ONLY
-          for (int i = 0; i < membersList.length; i++) {
-            if (membersList[i]['uid'] == _auth.currentUser!.uid) {
-              temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
-              break;
+            // CREATE STRING
+            String temp = "";
+            for (int i = 0; i < membersListFinal.length; i++) {
+              if (double.parse((double.parse(myControllers[i].text)).toStringAsFixed(2)) > 0.00) {
+                temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] + "," +
+                    (double.parse(myControllers[i].text)).toStringAsFixed(2) + ",no,no;";
+              }
             }
-          }
+            // OWNER ONLY
+            for (int i = 0; i < membersList.length; i++) {
+              if (membersList[i]['uid'] == _auth.currentUser!.uid) {
+                temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
+                break;
+              }
+            }
 
-          // APPEND TO FIRESTORE
-          _firestore.collection('notifications').add({
-            'test': temp,
-            'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
-          });
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-          widget.goToNotifications();
+            // APPEND TO FIRESTORE
+            _firestore.collection('notifications').add({
+              'test': temp,
+              'eventTime': DateTime.now().millisecondsSinceEpoch.toString()
+            });
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            widget.goToNotifications();
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  negativePresent ? "Amount cannot be negative!" : totalPrice == 0.00 ? "Invalid Bill Amount" : "Bill Amount Too Small!",
+                  style: TextStyle(
+                    color: Colors.white,
+                  )
+              ),
+              duration: Duration(seconds: 3),
+              backgroundColor: Color(0XFFFEA828),
+            ));
+          }
         },
         tooltip: "Create Group",
       ),
