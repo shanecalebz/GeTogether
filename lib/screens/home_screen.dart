@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getogether/screens/history.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -62,7 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
         for (String users in element.data()['test'].split(';')) {
           setState(() {
             eventTime.add(element.data()['eventTime'] + "," + sortIndex.toString());
-            userList.add(index.toString() + "," + users + "," + element.id + "," + element.data()['eventTime']);
+            if (users.split(',')[3] == "yes") {
+              userList.add(index.toString() + "," + users);
+            } else {
+              userList.add(index.toString() + "," + users + "," + element.id + "," + element.data()['eventTime']);
+            }
             sortIndex++;
           });
         }
@@ -107,28 +113,21 @@ class _HomeScreenState extends State<HomeScreen> {
             for (int z = 0; z < sortedUserList.length; z++) {
               if (sortedUserList[z].split(',')[0] == sortedUserList[j].split(',')[0]) {
                 if (_auth.currentUser!.uid != sortedUserList[z].split(',')[1]) {
-                  temp += sortedUserList[z].split(',')[1] + "," + sortedUserList[z].split(',')[2] + "," + sortedUserList[z].split(',')[3] + "," +
-                      sortedUserList[z].split(',')[4] + "," + sortedUserList[z].split(',')[5] + ";";
+                  if (sortedUserList[z].split(',')[4] == "yes") {
+                    temp += sortedUserList[z].split(',')[1] + "," + sortedUserList[z].split(',')[2] + "," + sortedUserList[z].split(',')[3] + "," +
+                        sortedUserList[z].split(',')[4] + "," + sortedUserList[z].split(',')[5] + "," + sortedUserList[z].split(',')[6] + "," + sortedUserList[z].split(',')[7] + "," + sortedUserList[z].split(',')[8] + ";";
+                  } else {
+                    temp += sortedUserList[z].split(',')[1] + "," + sortedUserList[z].split(',')[2] + "," + sortedUserList[z].split(',')[3] + "," +
+                        sortedUserList[z].split(',')[4] + "," + sortedUserList[z].split(',')[5] + ";";
+                  }
+                } else {
+                  temp += sortedUserList[z].split(',')[1] + "," + sortedUserList[z].split(',')[2] + "," + sortedUserList[z].split(',')[3] + ",yes," + sortedUserList[z].split(',')[5] + "," + sortedUserList[z].split(',')[6] + "," + sortedUserList[z].split(',')[7] + "," + DateTime.now().millisecondsSinceEpoch.toString() + ";";
                 }
               }
             }
             temp = temp.substring(0, temp.length - 1);
 
-            // CHECK IF OWNER ONLY
-            onlyOwner = true;
-            for (String user in temp.split(';')) {
-              if (user.split(',')[4] == "no") {
-                onlyOwner = false;
-              }
-            }
-
-            if (onlyOwner == true) {
-              // DELETE DOCUMENT
-              await _firestore.collection('notifications').doc(sortedUserList[j].split(',')[6]).delete();
-            } else {
-              // UPDATE DOCUMENT
-              await _firestore.collection('notifications').doc(sortedUserList[j].split(',')[6]).update({'test': temp});
-            }
+            await _firestore.collection('notifications').doc(sortedUserList[j].split(',')[6]).update({'test': temp});
 
             // SHOW SNACKBAR
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -251,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for (int j = 0; j < sortedUserList.length; j++) {
       if (_auth.currentUser!.uid == sortedUserList[j].split(',')[1] && sortedUserList[j].split(',')[5] == "yes" && sortedUserList[j].split(',')[4] == "no") {
         for (int i = 0; i < sortedUserList.length; i++) {
-          if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "no") {
+          if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "no" && sortedUserList[i].split(',')[4] == "no") {
             count++;
           }
         }
@@ -278,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       for (int i = 0; i < sortedUserList.length; i++)
-                        if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "no")
+                        if (sortedUserList[i].split(',')[0] == sortedUserList[j].split(',')[0] && sortedUserList[i].split(',')[5] == "no" && sortedUserList[i].split(',')[4] == "no")
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Container(
@@ -332,7 +331,22 @@ class _HomeScreenState extends State<HomeScreen> {
               Tab(text: "Collect"),
             ]
           ),
-          title: Text("GeTogether"),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("GeTogether"),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => History()));
+                },
+                child: Icon(
+                  Icons.notifications,
+                  size: 25.0,
+                  color: Colors.white,
+                ),
+              )
+            ],
+          ),
         ),
         body: TabBarView(
           children: [
