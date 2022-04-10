@@ -72,7 +72,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     Container(
                       width: size.width / 1.1,
                       child: Text(
-                        "Create Account to Contiue!",
+                        "Create Account to Continue!",
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 20,
@@ -101,7 +101,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: reusableTextField("Enter Email Address",
-                            Icons.person_outline, false, _email),
+                            Icons.email_outlined, false, _email),
                       ),
                     ),
                     Padding(
