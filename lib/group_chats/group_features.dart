@@ -117,7 +117,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GroupBeforeFinanceScreen(goToNotifications: widget.goToNotifications)));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => RandomizerHome()));
                       },
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
                       child: Padding(
@@ -127,34 +127,14 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: Stack(
-                                children: [
-                                  Icon(
-                                    Icons.attach_money,
-                                    size: 40.0,
-                                    color: Colors.green,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 18.0),
-                                    child: Icon(
-                                      Icons.attach_money,
-                                      size: 40.0,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 36.0),
-                                    child: Icon(
-                                      Icons.attach_money,
-                                      size: 40.0,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ],
+                              child: Icon(
+                              Icons.chat_outlined,
+                              size: 45.0,
+                              color: Colors.green,
                               ),
                             ),
                             Text(
-                              "Finance",
+                              "Randomizer",
                               style: TextStyle(
                                   fontSize: 20.0,
                                   fontFamily: 'JosefinSans',
@@ -185,7 +165,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => RandomizerHome()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => GroupBeforeFinanceScreen(goToNotifications: widget.goToNotifications)));
                         },
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         child: Padding(
@@ -195,14 +175,34 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(5.0),
-                                child: Icon(
-                                  Icons.fastfood_outlined,
-                                  size: 45.0,
-                                  color: Colors.green,
+                                child: Stack(
+                                  children: [
+                                    Icon(
+                                      Icons.attach_money,
+                                      size: 40.0,
+                                      color: Colors.green,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 18.0),
+                                      child: Icon(
+                                        Icons.attach_money,
+                                        size: 40.0,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 36.0),
+                                      child: Icon(
+                                        Icons.attach_money,
+                                        size: 40.0,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Text(
-                                "Randomizer",
+                                "Finance",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontFamily: 'JosefinSans',
@@ -292,7 +292,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                                 ),
                               ),
                               Text(
-                                "Bill Calculator",
+                                "QR Scanner",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontFamily: 'JosefinSans',
