@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import 'custom_input_page.dart';
@@ -49,11 +48,9 @@ class _PercentageInputState extends State<PercentageInput> {
       membersList = chatMap['members'];
 
       for (int i = 0; i < membersList.length; i++) {
-        if (membersList[i]['uid'] != _auth.currentUser!.uid) {
-          membersListFinal.add(membersList[i]);
-          TextEditingController controller = TextEditingController();
-          percControllers.add(controller);
-        }
+        membersListFinal.add(membersList[i]);
+        TextEditingController controller = TextEditingController();
+        percControllers.add(controller);
       }
 
       for (int i = 0; i < percControllers.length; i++) {
