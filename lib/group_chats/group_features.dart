@@ -128,7 +128,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                             Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Icon(
-                              Icons.chat_outlined,
+                              Icons.fastfood_outlined,
                               size: 45.0,
                               color: Colors.green,
                               ),
@@ -226,7 +226,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddMembersInGroup()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => QRScanner()));
                         },
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         child: Padding(
@@ -237,13 +237,13 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(5.0),
                                 child: Icon(
-                                  Icons.add,
+                                  Icons.qr_code,
                                   size: 50.0,
                                   color: Colors.green,
                                 ),
                               ),
                               Text(
-                                "Create Group",
+                                "QR Scanner",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontFamily: 'JosefinSans',
@@ -275,7 +275,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => QRScanner()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddMembersInGroup()));
                         },
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         child: Padding(
@@ -286,13 +286,13 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(5.0),
                                 child: Icon(
-                                  Icons.qr_code,
+                                  Icons.add,
                                   size: 45.0,
                                   color: Colors.green,
                                 ),
                               ),
                               Text(
-                                "QR Scanner",
+                                "Create Group",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontFamily: 'JosefinSans',
