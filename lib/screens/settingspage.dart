@@ -14,7 +14,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void reloadUser() async {
+    await _auth.currentUser?.reload();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +27,18 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Column(
         children: [
           ProfilePic(),
-          Text("${_auth.currentUser?.displayName}",
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic)),
+          StreamBuilder<User?>(
+            stream: _auth.userChanges(),
+            builder: (context, snapshot) {
+              return Text("${_auth.currentUser?.displayName}",
+                  style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic));
+            }
+          ),
           SizedBox(height: 20),
           ProfileMenu(
             text: "My Profile",
             icon: "assets/icons/User Icon.svg",
-            press: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ProfileView())),
+            press: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProfileView())).then((value) => reloadUser()),
           ),
           ProfileMenu(
             text: "Notifications",

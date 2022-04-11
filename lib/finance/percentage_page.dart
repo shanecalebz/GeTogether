@@ -161,11 +161,11 @@ class _PercentageInputState extends State<PercentageInput> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+            Widget build(BuildContext context) {
+      return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.primaryColor,
-        title: Text('Percentage Input (${widget.groupName})'),
+      backgroundColor: Palette.primaryColor,
+      title: Text('Percentage Input (${widget.groupName})'),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -315,7 +315,16 @@ class _PercentageInputState extends State<PercentageInput> {
                                                     SizedBox(
                                                       height: 10,
                                                     ),
-                                                    Text(membersListFinal[index]['name']),
+                                                    SizedBox(
+                                                      width: 50.0,
+                                                      child: Text(
+                                                        membersListFinal[index]['name'],
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: (_auth.currentUser!.uid == membersListFinal[index]['uid']) == true ? Colors.blue : Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
                                                     Spacer(),
                                                     SizedBox(
                                                       width: 50,
@@ -380,25 +389,18 @@ class _PercentageInputState extends State<PercentageInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              if (double.parse((_billAmount * (double.parse(percControllers[i].text)) / 100)
-                      .toStringAsFixed(2)) >
-                  0.00) {
-                temp += membersListFinal[i]['uid'] +
-                    "," +
-                    membersListFinal[i]['name'] +
-                    "," +
-                    (_billAmount * (double.parse(percControllers[i].text)) / 100)
-                        .toStringAsFixed(2) +
-                    ",no,no;";
+              if (double.parse((_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2)) > 0.00) {
+                if (_auth.currentUser!.uid == membersListFinal[i]['uid']) {
+                  // OWNER
+                  temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] + ",0.00,no,yes;";
+                } else {
+                  // NOT OWNER
+                  temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] + "," + (_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2) + ",no,no;";
+                }
               }
             }
-            // OWNER ONLY
-            for (int i = 0; i < membersList.length; i++) {
-              if (membersList[i]['uid'] == _auth.currentUser!.uid) {
-                temp += membersList[i]['uid'] + "," + membersList[i]['name'] + ",0.00,no,yes";
-                break;
-              }
-            }
+            temp = temp.substring(0, temp.length - 1);
+
             // APPEND TO FIRESTORE
             _firestore
                 .collection('notifications')

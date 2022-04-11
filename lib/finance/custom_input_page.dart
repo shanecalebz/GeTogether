@@ -251,7 +251,16 @@ class _EqualInputState extends State<EqualInput> {
                                                     SizedBox(
                                                       height: 10,
                                                     ),
-                                                    Text(membersList[index]['name']),
+                                                    SizedBox(
+                                                      width: 50.0,
+                                                      child: Text(
+                                                        membersList[index]['name'],
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: (_auth.currentUser!.uid == membersList[index]['uid']) == true ? Colors.blue : Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
                                                     Spacer(),
                                                     Container(
                                                       margin: EdgeInsets.all(15),
@@ -316,6 +325,7 @@ class _EqualInputState extends State<EqualInput> {
           } else {
             for (int i = 0; i < membersList.length; i++) {
               if (_auth.currentUser?.uid == membersList[i]['uid']) {
+                // OWNER
                 temp += membersList[i]['uid'] +
                     "," +
                     membersList[i]['name'] +
@@ -323,6 +333,7 @@ class _EqualInputState extends State<EqualInput> {
                     (_billAmount / membersList.length).toStringAsFixed(2) +
                     ",no,yes";
               } else {
+                // NOT OWNER
                 temp += membersList[i]['uid'] +
                     "," +
                     membersList[i]['name'] +

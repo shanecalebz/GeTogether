@@ -18,6 +18,9 @@ class _ProfileViewState extends State<ProfileView> {
   final TextEditingController _bio = TextEditingController();
   String currentUserName = "";
   String currentUserBio = "";
+  late String groupID;
+  late String notificationID;
+  late bool userExistsInGroup;
 
   void getUserInfo() async {
     await _firestore
@@ -97,16 +100,78 @@ class _ProfileViewState extends State<ProfileView> {
               child: RaisedButton(
                 color: Colors.white,
                 splashColor: Colors.grey.shade50,
-                onPressed: () {
-                  // UPDATE FIRESTORE
-                  _firestore
-                      .collection('users')
-                      .doc(_auth.currentUser?.uid)
-                      .update({'name': "${_username.text}"});
-                  _firestore
-                      .collection('users')
-                      .doc(_auth.currentUser?.uid)
-                      .update({'bio': "${_bio.text}"});
+                onPressed: () async {
+                  // UPDATE "USER" COLLECTION
+                  _firestore.collection('users').doc(_auth.currentUser?.uid).update({'name': "${_username.text}"});
+                  _firestore.collection('users').doc(_auth.currentUser?.uid).update({'bio': "${_bio.text}"});
+
+                  // UPDATE "NOTIFICATION COLLECTION
+                  await _firestore.collection("notifications").get().then((eventData) {
+                    eventData.docs.map((DocumentSnapshot document) async {
+                      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                      notificationID = document.id;
+                      userExistsInGroup = false;
+                      for (String user in data['test'].split(';')) {
+                        if (user.split(',')[0] == _auth.currentUser!.uid) {
+                          userExistsInGroup = true;
+                        }
+                      }
+                      if (userExistsInGroup == true) {
+                        String temp = "";
+                        for (String user in data['test'].split(';')) {
+                          if (user.split(',')[0] == _auth.currentUser!.uid) {
+                            temp += user.split(',')[0] + "," + _username.text;
+                            for (int z = 2; z < user.split(',').length; z++) {
+                              temp += "," + user.split(',')[z];
+                            }
+                            temp += ";";
+                          } else {
+                            temp += user + ";";
+                          }
+                        }
+                        temp = temp.substring(0, temp.length - 1);
+                        await _firestore.collection('notifications').doc(notificationID).update({'test': temp});
+                      }
+                    }).toList();
+                  });
+
+                  // UPDATE "GROUP" COLLECTION
+                  await _firestore.collection('groups').get().then((eventData) {
+                    final eventDataFinal = eventData.docs.map((doc) => doc.data()).toList();
+                    for (int i = 0; i < eventDataFinal.length; i++) {
+                      groupID = eventDataFinal[i]['id'];
+                      final List<Map<String, dynamic>> groupMap = [];
+                      userExistsInGroup = false;
+                      for (int j = 0; j < eventDataFinal[i]['members'].length; j++) {
+                        if (eventDataFinal[i]['members'][j]['uid'] == _auth.currentUser!.uid) {
+                          userExistsInGroup = true;
+                        }
+                      }
+                      if (userExistsInGroup == true) {
+                        for (int j = 0; j < eventDataFinal[i]['members'].length; j++) {
+                          if (eventDataFinal[i]['members'][j]['uid'] == _auth.currentUser!.uid) {
+                            groupMap.add({
+                              "email": eventDataFinal[i]['members'][j]['email'],
+                              "isAdmin": eventDataFinal[i]['members'][j]['isAdmin'],
+                              "name": "${_username.text}",
+                              "uid": eventDataFinal[i]['members'][j]['uid'],
+                            });
+                          } else {
+                            groupMap.add({
+                              "email": eventDataFinal[i]['members'][j]['email'],
+                              "isAdmin": eventDataFinal[i]['members'][j]['isAdmin'],
+                              "name": eventDataFinal[i]['members'][j]['name'],
+                              "uid": eventDataFinal[i]['members'][j]['uid'],
+                            });
+                          }
+                        }
+                        _firestore.collection('groups').doc(groupID).set({
+                          "members": groupMap,
+                          "id": groupID,
+                        });
+                      }
+                    }
+                  });
 
                   // UPDATE AUTHENTICATION PROFILE
                   _auth.currentUser?.updateDisplayName(_username.text);
