@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getogether/screens/history.dart';
+import 'package:getogether/screens/payment_history.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {

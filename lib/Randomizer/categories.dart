@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/Randomizer/wheel.dart';
 
+import '../utils/constants.dart';
+
 class Categories extends StatefulWidget {
   int selectionIndex;
+  String selectionText;
 
-  Categories({required this.selectionIndex});
+  Categories({required this.selectionIndex, required this.selectionText});
 
   @override
   _CategoriesState createState() => _CategoriesState();
@@ -63,8 +66,9 @@ class _CategoriesState extends State<Categories> {
                         child: Text(
                           eatCategories[i].split(',')[0],
                           style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
+                              fontSize: 25.0,
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.bold
                           ),
                         ),
                       ),
@@ -97,8 +101,9 @@ class _CategoriesState extends State<Categories> {
                       child: Text(
                         eatCategories[i].split(',')[0],
                         style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
+                            fontSize: 25.0,
+                            fontFamily: 'JosefinSans',
+                            fontWeight: FontWeight.bold
                         ),
                       ),
                     ),
@@ -140,8 +145,9 @@ class _CategoriesState extends State<Categories> {
                         child: Text(
                           doCategories[i].split(',')[0],
                           style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
+                              fontSize: 25.0,
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.bold
                           ),
                         ),
                       ),
@@ -174,8 +180,9 @@ class _CategoriesState extends State<Categories> {
                       child: Text(
                         doCategories[i].split(',')[0],
                         style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
+                            fontSize: 25.0,
+                            fontFamily: 'JosefinSans',
+                            fontWeight: FontWeight.bold
                         ),
                       ),
                     ),
@@ -190,44 +197,36 @@ class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Palette.primaryColor,
+        title: Stack(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                size: 23.5,
+                color: Colors.white,
+              ),
+            ),
+            Center(
+                child: Text(
+                    widget.selectionText,
+                )
+            ),
+          ],
+        ),
+      ),
       body: Padding(
-        padding: EdgeInsets.only(top: 80.0, bottom: 30.0),
+        padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(15.0))),
-                      child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
-                          size: 24.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                child: buildCategories(),
-              ),
-            ],
+          child: Padding(
+            padding: EdgeInsets.only(left: 30.0, right: 30.0),
+            child: buildCategories(),
           ),
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
+import '../utils/constants.dart';
 import 'group_info.dart';
 
 class GroupChatRoom extends StatelessWidget {
@@ -109,6 +110,7 @@ class GroupChatRoom extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(groupName),
+        backgroundColor: Palette.primaryColor,
         actions: [
           IconButton(
               onPressed: () => Navigator.of(context).push(
@@ -202,7 +204,7 @@ class GroupChatRoom extends StatelessWidget {
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.blue,
+                color: Colors.blueAccent,
               ),
               child: Column(
                 crossAxisAlignment: chatMap['sendBy'] == _auth.currentUser!.displayName ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -210,8 +212,8 @@ class GroupChatRoom extends StatelessWidget {
                   Text(
                     chatMap['sendBy'],
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
@@ -222,7 +224,6 @@ class GroupChatRoom extends StatelessWidget {
                     chatMap['message'],
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                   ),

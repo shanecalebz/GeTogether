@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
-import 'custom_input_page.dart';
+import 'equal_input.dart';
 import 'user_data.dart';
 import 'widgets.dart';
 import 'reusable_card.dart';

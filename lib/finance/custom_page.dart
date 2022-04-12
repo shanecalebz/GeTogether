@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getogether/finance/custom_input_page.dart';
+import 'package:getogether/finance/equal_input.dart';
 import '../utils/constants.dart';
 import 'widgets.dart';
 import 'reusable_card.dart';

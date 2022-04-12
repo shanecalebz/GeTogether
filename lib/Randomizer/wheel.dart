@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:getogether/Randomizer/suggestions.dart';
 
+import '../utils/constants.dart';
+
 class Wheel extends StatefulWidget {
   int selectionIndex;
   int categoryIndex;
@@ -25,110 +27,6 @@ class _WheelState extends State<Wheel> {
   double selectedTextOpacity = 0.0;
   late int count;
   var itemIndex = 0;
-
-  Widget buildNavigation() {
-    if (widget.categoryIndex == (widget.categoryList.length - 1)) {
-      return Padding(
-        padding: EdgeInsets.only(left: 15.0, right: 15.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                      size: 24.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (_) => Suggestions(
-                                  selectionIndex: widget.selectionIndex)))
-                      .then((value) {
-                    if (value != null) {
-                      setState(() {
-                        if (textEditingController.text.isEmpty) {
-                          textEditingController.text = value;
-                        } else if (textEditingController.text.substring(
-                                textEditingController.text.length - 1) ==
-                            ",") {
-                          textEditingController.text =
-                              textEditingController.text + value;
-                        } else {
-                          textEditingController.text =
-                              textEditingController.text + "," + value;
-                        }
-                      });
-                    }
-                  });
-                },
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.lightbulb,
-                      color: Colors.yellow[800],
-                      size: 24.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Padding(
-        padding: EdgeInsets.only(left: 15.0, right: 15.0),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                  size: 24.0,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-  }
 
   Widget buildFortuneWheel() {
     if (widget.categoryIndex != (widget.categoryList.length - 1)) {
@@ -273,12 +171,34 @@ class _WheelState extends State<Wheel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Palette.primaryColor,
+          title: Stack(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 23.5,
+                  color: Colors.white,
+                ),
+              ),
+              Center(
+                  child: Text(
+                      "Categories"
+                  )
+              ),
+            ],
+          ),
+        ),
+      body: Padding(
       padding: EdgeInsets.only(top: 80.0, bottom: 30.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildNavigation(),
           buildFortuneWheel(),
           Padding(
             padding: EdgeInsets.only(bottom: 30.0),

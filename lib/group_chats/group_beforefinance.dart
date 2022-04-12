@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:getogether/finance/custom_input_page.dart';
+import 'package:getogether/finance/equal_input.dart';
 import '../utils/constants.dart';
 import 'group_chat_room.dart';
 import 'package:getogether/finance/finance_features.dart';

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:getogether/group_chats/group_chat_screen.dart';
 import 'package:getogether/qrscanner/qr_scanner.dart';
-import 'package:getogether/screens/history.dart';
+import 'package:getogether/screens/payment_history.dart';
 import '../Randomizer/randomizer_home.dart';
 import '../finance/finance_features.dart';
 import '../qrscanner/calculate_total_price.dart';
@@ -225,8 +225,11 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => QRScanner()));
+                        onTap: () async {
+                          final result = await Navigator.of(context).push(MaterialPageRoute(builder: (_) => QRScanner()));
+                          if (result != null) {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => CalculateTotalPrice(menu: result)));
+                          }
                         },
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         child: Padding(
@@ -323,9 +326,9 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                           padding: const EdgeInsets.all(15.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Padding(
-                                padding: const EdgeInsets.all(3.5),
+                                padding: EdgeInsets.all(3.5),
                                 child: Icon(
                                   Icons.list_alt,
                                   size: 45.0,
