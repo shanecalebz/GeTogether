@@ -8,26 +8,23 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import '../utils/constants.dart';
 import 'group_info.dart';
-import 'package:intl/intl.dart';
 
-class GroupChatRoom extends StatefulWidget {
+class GroupChatRoomTemp extends StatefulWidget {
 
   final String groupChatId, groupName;
-  GroupChatRoom({required this.groupName, required this.groupChatId});
+  GroupChatRoomTemp({required this.groupName, required this.groupChatId});
 
   @override
-  State<GroupChatRoom> createState() => _GroupChatRoomState();
+  State<GroupChatRoomTemp> createState() => _GroupChatRoomTempState();
 }
 
-class _GroupChatRoomState extends State<GroupChatRoom> {
+class _GroupChatRoomTempState extends State<GroupChatRoomTemp> {
 
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final ScrollController scrollController = new ScrollController();
 
-  bool alreadyScrolled = false;
-  bool isLoading = true;
   File? imageFile;
   late bool userUIDFound;
   String userUIDString = "";
@@ -56,7 +53,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
       "message": "",
       "type": "img",
       "uid": _auth.currentUser!.uid,
-      "time": DateTime.now().millisecondsSinceEpoch,
+      "time": FieldValue.serverTimestamp(),
     });
 
     var ref =
@@ -87,6 +84,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
     }
   }
 
+
   void onSendMessage() async {
     if (_message.text.isNotEmpty) {
       Map<String, dynamic> chatData = {
@@ -94,7 +92,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
         "message": _message.text,
         "type": "text",
         "uid": _auth.currentUser!.uid,
-        "time": DateTime.now().millisecondsSinceEpoch,
+        "time": FieldValue.serverTimestamp(),
       };
 
       _message.clear();
@@ -120,8 +118,10 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
       if (uid == userUIDList[i].split(',')[0]) {
         userUIDFound = true;
         userUIDString = userUIDList[i].split(',')[1];
+        print("YES");
       }
     }
+    print("NO");
 
     if (userUIDFound == true) {
       return Text(
@@ -138,21 +138,32 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.bold,
-          color: Colors.grey,
+          color: Colors.red,
         ),
       );
     }
   }
 
   Widget messageTile(Size size, Map<String, dynamic> chatMap, BuildContext context) {
+
+    // GET ALL THE NAMES OF THE GROUP BY UID
+    _firestore.collection('groups').doc(widget.groupChatId).get().then((value) {
+      userUIDList.clear();
+      for (int i = 0; i < value.data()!['members'].length; i++) {
+        setState(() {
+          userUIDList.add(value.data()!['members'][i]['uid']  + "," + value.data()!['members'][i]['name']);
+        });
+      }
+    });
+
     return Builder(builder: (_) {
       if (chatMap['type'] == "text") {
-        if (chatMap['type'] == "text") {
-          return Align(
-          alignment: chatMap['uid'] == _auth.currentUser!.uid ? Alignment.centerRight : Alignment.centerLeft,
-          child: Padding(
-            padding:  chatMap['uid'] == _auth.currentUser!.uid ? EdgeInsets.only(left: MediaQuery.of(context).size.width / 2) : EdgeInsets.only(right: MediaQuery.of(context).size.width / 2),
-            child: Container(
+        return chatMap['type'] == "text" ? Container(
+          width: size.width,
+          alignment: chatMap['uid'] == _auth.currentUser!.uid
+              ? Alignment.centerRight
+              : Alignment.centerLeft,
+          child: Container(
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
               decoration: BoxDecoration(
@@ -160,33 +171,22 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                 color: Colors.blueAccent,
               ),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: chatMap['uid'] == _auth.currentUser!.uid ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
-                  chatMap['uid'] == _auth.currentUser!.uid ? Container(width: 0.0) : printText(chatMap['uid']),
-                  chatMap['uid'] == _auth.currentUser!.uid ? Container(width: 0.0) : SizedBox(height: size.height / 200),
+                  printText(chatMap['uid']),
+                  SizedBox(
+                    height: size.height / 200,
+                  ),
                   Text(
                     chatMap['message'],
                     style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white
-                    ),
-                  ),
-                  SizedBox(height: size.height / 200),
-                  Text(
-                    DateFormat("dd MMM - HH:mm").format(DateTime.fromMillisecondsSinceEpoch(int.parse(chatMap['time'].toString()))),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[100],
+                      fontSize: 16,
+                      color: Colors.white,
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-        );
-        } else {
-          return Container(
+              )),
+        ) : Container(
           height: size.height / 2.5,
           width: size.width,
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -204,7 +204,6 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
 
           ),
         );
-        }
       } else if (chatMap['type'] == "img") {
         return Container(
           width: size.width,
@@ -249,33 +248,9 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
     });
   }
 
-  void getUserUID() {
-    // GET ALL THE NAMES OF THE GROUP BY UID
-    _firestore.collection('groups').doc(widget.groupChatId).get().then((value) {
-      userUIDList.clear();
-      for (int i = 0; i < value.data()!['members'].length; i++) {
-        setState(() {
-          userUIDList.add(value.data()!['members'][i]['uid']  + "," + value.data()!['members'][i]['name']);
-        });
-      }
-      setState(() {
-        isLoading = false;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserUID();
-  }
-
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-
-    });
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) { scrollToEnd(); });
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -294,13 +269,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
               icon: Icon(Icons.more_vert)),
         ],
       ),
-      body: isLoading ? Container(
-        height: size.height,
-        width: size.width,
-        alignment: Alignment.center,
-        child: CircularProgressIndicator(),
-      ) :
-      Column(
+      body: Column(
         children: [
           Flexible(
             child: StreamBuilder<QuerySnapshot>(
@@ -320,13 +289,6 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                       Map<String, dynamic> chatMap =
                       snapshot.data!.docs[index].data()
                       as Map<String, dynamic>;
-
-                      if (alreadyScrolled == false) {
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          scrollToEnd();
-                        });
-                        alreadyScrolled = true;
-                      }
 
                       return messageTile(size, chatMap, context);
                     },

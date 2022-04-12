@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/constants.dart';
 import 'create_group.dart';
 
 class AddMembersInGroup extends StatefulWidget {
@@ -53,7 +54,9 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
         .get()
         .then((value) {
       setState(() {
-        userMap = value.docs[0].data();
+        if (value.docs.isNotEmpty) {
+          userMap = value.docs[0].data();
+        }
         isLoading = false;
       });
       print(userMap);
@@ -97,7 +100,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: Palette.primaryColor,
         title: Text("Add Members"),
       ),
       body: SingleChildScrollView(
@@ -152,7 +155,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
                     child: CircularProgressIndicator(),
                   )
                 : ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.orange),
+                    style: ElevatedButton.styleFrom(primary: Palette.primaryColor),
                     onPressed: onSearch,
                     child: Text("Search"),
                   ),
@@ -170,7 +173,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       ),
       floatingActionButton: membersList.length >= 2
           ? FloatingActionButton(
-              backgroundColor: Colors.orange,
+              backgroundColor: Palette.primaryColor,
               child: Icon(Icons.forward),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(

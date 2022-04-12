@@ -4,6 +4,8 @@ import 'package:google_place/google_place.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:location/location.dart' as UserLocation;
 
+import '../utils/constants.dart';
+
 class Suggestions extends StatefulWidget {
 
   int selectionIndex;
@@ -93,7 +95,9 @@ class _SuggestionsState extends State<Suggestions> {
                 child: Text(
                   "0.0",
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 16.0,
+                    fontFamily: 'JosefinSans',
+                    fontWeight: FontWeight.bold,
                     color: Colors.grey[700],
                   ),
                 )
@@ -121,7 +125,9 @@ class _SuggestionsState extends State<Suggestions> {
                 child: Text(
                   result.results[index].rating.toString(),
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 16.0,
+                    fontFamily: 'JosefinSans',
+                    fontWeight: FontWeight.bold,
                     color: Colors.grey[700],
                   ),
                 )
@@ -146,7 +152,9 @@ class _SuggestionsState extends State<Suggestions> {
       return Text(
         "No reviews yet",
         style: TextStyle(
-          fontSize: 15.0,
+          fontSize: 16.0,
+          fontFamily: 'JosefinSans',
+          fontWeight: FontWeight.bold,
           color: Colors.grey[700],
         ),
       );
@@ -159,7 +167,9 @@ class _SuggestionsState extends State<Suggestions> {
         return Text(
           "Delivery & Takeaway only",
           style: TextStyle(
-            fontSize: 15.0,
+            fontSize: 16.0,
+            fontFamily: 'JosefinSans',
+            fontWeight: FontWeight.bold,
             color: Colors.grey[700],
           ),
         );
@@ -167,7 +177,9 @@ class _SuggestionsState extends State<Suggestions> {
         return Text(
           "Delivery only",
           style: TextStyle(
-            fontSize: 15.0,
+            fontSize: 16.0,
+            fontFamily: 'JosefinSans',
+            fontWeight: FontWeight.bold,
             color: Colors.grey[700],
           ),
         );
@@ -175,7 +187,9 @@ class _SuggestionsState extends State<Suggestions> {
         return Text(
           "Takeaway only",
           style: TextStyle(
-            fontSize: 15.0,
+            fontSize: 16.0,
+            fontFamily: 'JosefinSans',
+            fontWeight: FontWeight.bold,
             color: Colors.grey[700],
           ),
         );
@@ -183,7 +197,9 @@ class _SuggestionsState extends State<Suggestions> {
         return Text(
           result.results[index].types[0][0].toUpperCase() + result.results[index].types[0].substring(1).toLowerCase().replaceAll('_', ' '),
           style: TextStyle(
-            fontSize: 15.0,
+            fontSize: 16.0,
+            fontFamily: 'JosefinSans',
+            fontWeight: FontWeight.bold,
             color: Colors.grey[700],
           ),
         );
@@ -201,7 +217,9 @@ class _SuggestionsState extends State<Suggestions> {
             Text(
               "\$",
               style: TextStyle(
-                fontSize: 15.0,
+                fontSize: 16.0,
+                fontFamily: 'JosefinSans',
+                fontWeight: FontWeight.bold,
                 color: Colors.grey[700],
               ),
             )
@@ -211,7 +229,9 @@ class _SuggestionsState extends State<Suggestions> {
             child: Text(
               "\u2022",
               style: TextStyle(
-                fontSize: 15.0,
+                fontSize: 16.0,
+                fontFamily: 'JosefinSans',
+                fontWeight: FontWeight.bold,
                 color: Colors.grey[700],
               ),
             ),
@@ -241,6 +261,8 @@ class _SuggestionsState extends State<Suggestions> {
                     "Getting location permissions...",
                     style: TextStyle(
                       fontSize: 16.0,
+                      fontFamily: 'JosefinSans',
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -266,6 +288,8 @@ class _SuggestionsState extends State<Suggestions> {
                     "Location permissions not granted!",
                     style: TextStyle(
                       fontSize: 16.0,
+                      fontFamily: 'JosefinSans',
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -290,6 +314,8 @@ class _SuggestionsState extends State<Suggestions> {
                     "Getting nearby suggestions...",
                     style: TextStyle(
                       fontSize: 16.0,
+                      fontFamily: 'JosefinSans',
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -321,6 +347,8 @@ class _SuggestionsState extends State<Suggestions> {
                               "Suggestions Near Me",
                               style: TextStyle(
                                 fontSize: 20.0,
+                                fontFamily: 'JosefinSans',
+                                fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
@@ -345,14 +373,18 @@ class _SuggestionsState extends State<Suggestions> {
                                             Text(
                                               result.results[index].name,
                                               style: TextStyle(
-                                                fontSize: 14.0,
+                                                fontSize: 16.0,
+                                                fontFamily: 'JosefinSans',
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.black,
                                               ),
                                             ),
                                             Text(
                                               result.results[index].vicinity,
                                               style: TextStyle(
-                                                fontSize: 14.0,
+                                                fontSize: 16.0,
+                                                fontFamily: 'JosefinSans',
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.grey[700],
                                               ),
                                             ),
@@ -425,6 +457,8 @@ class _SuggestionsState extends State<Suggestions> {
                   style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,
+                    fontFamily: 'JosefinSans',
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -446,37 +480,34 @@ class _SuggestionsState extends State<Suggestions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Palette.primaryColor,
+        title: Stack(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                size: 23.5,
+                color: Colors.white,
+              ),
+            ),
+            Center(
+                child: Text(
+                  "Suggestions",
+                )
+            ),
+          ],
+        ),
+      ),
       body: Padding(
-        padding: EdgeInsets.only(top: 80.0, bottom: 30.0),
+        padding: EdgeInsets.only(top: 30.0, bottom: 30.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.all(Radius.circular(15.0))
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                        size: 24.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
             buildWidget(),
             Padding(
               padding: EdgeInsets.only(top: 30.0),

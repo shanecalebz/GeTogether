@@ -51,7 +51,7 @@ class _GroupBeforeFinanceScreenState extends State<GroupBeforeFinanceScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.primaryColor,
-        title: Text("Select Group Chat"),
+        title: Text("Select Group"),
       ),
       body: isLoading
           ? Container(

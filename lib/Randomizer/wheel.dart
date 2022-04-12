@@ -57,7 +57,12 @@ class _WheelState extends State<Wheel> {
                   FortuneItem(
                     child: Text(
                       widget.categoryList[widget.categoryIndex].split(',')[i],
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                        fontFamily: 'JosefinSans',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     style: FortuneItemStyle(
                       color: Colors.white,
@@ -96,7 +101,12 @@ class _WheelState extends State<Wheel> {
                 FortuneItem(
                   child: Text(
                     userInput[i],
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontFamily: 'JosefinSans',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   style: FortuneItemStyle(
                     color: Colors.white,
@@ -129,13 +139,17 @@ class _WheelState extends State<Wheel> {
               controller: textEditingController,
               textInputAction: TextInputAction.done,
               style: TextStyle(
-                fontSize: 15.0,
+                fontSize: 20.0,
+                fontFamily: 'JosefinSans',
+                fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Enter inputs here, separated by commas.",
                 hintStyle: TextStyle(
-                  fontSize: 15.0,
+                  fontSize: 20.0,
+                  fontFamily: 'JosefinSans',
+                  fontWeight: FontWeight.bold,
                   color: Colors.grey,
                 ),
                 border: InputBorder.none,
@@ -188,9 +202,52 @@ class _WheelState extends State<Wheel> {
               ),
               Center(
                   child: Text(
-                      "Categories"
+                      widget.categoryList[widget.categoryIndex].split(',')[0],
                   )
               ),
+              widget.categoryIndex == (widget.categoryList.length - 1) ? Align(
+                alignment: Alignment.centerRight,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (_) => Suggestions(
+                                  selectionIndex: widget.selectionIndex)))
+                          .then((value) {
+                        if (value != null) {
+                          setState(() {
+                            if (textEditingController.text.isEmpty) {
+                              textEditingController.text = value;
+                            } else if (textEditingController.text.substring(
+                                textEditingController.text.length - 1) ==
+                                ",") {
+                              textEditingController.text =
+                                  textEditingController.text + value;
+                            } else {
+                              textEditingController.text =
+                                  textEditingController.text + "," + value;
+                            }
+                          });
+                        }
+                      });
+                    },
+                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                      child: Icon(
+                        Icons.lightbulb,
+                        color: Colors.white,
+                        size: 23.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ) : Container(),
             ],
           ),
         ),
@@ -215,12 +272,15 @@ class _WheelState extends State<Wheel> {
                             Text("You got",
                                 style: TextStyle(
                                   color: Colors.black,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 15.0,
                                 )),
                             Text(userInput[itemIndex],
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
+                                  fontFamily: 'JosefinSans',
                                   fontWeight: FontWeight.bold,
                                 ))
                           ],
@@ -231,6 +291,8 @@ class _WheelState extends State<Wheel> {
                             Text("You got",
                                 style: TextStyle(
                                   color: Colors.black,
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 15.0,
                                 )),
                             Text(
@@ -239,6 +301,7 @@ class _WheelState extends State<Wheel> {
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
+                                  fontFamily: 'JosefinSans',
                                   fontWeight: FontWeight.bold,
                                 ))
                           ],
@@ -293,6 +356,8 @@ class _WheelState extends State<Wheel> {
                       "SPIN",
                       style: TextStyle(
                         fontSize: 20.0,
+                        fontFamily: 'JosefinSans',
+                        fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),

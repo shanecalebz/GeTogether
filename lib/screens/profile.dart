@@ -52,8 +52,27 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("GeTogether")),
+        automaticallyImplyLeading: false,
         backgroundColor: Palette.primaryColor,
+        title: Stack(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                size: 23.5,
+                color: Colors.white,
+              ),
+            ),
+            Center(
+                child: Text(
+                    "Profile"
+                )
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -98,7 +117,7 @@ class _ProfileViewState extends State<ProfileView> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: RaisedButton(
-                color: Colors.white,
+                color: Palette.primaryColor,
                 splashColor: Colors.grey.shade50,
                 onPressed: () async {
                   // UPDATE "USER" COLLECTION
@@ -177,7 +196,12 @@ class _ProfileViewState extends State<ProfileView> {
                   _auth.currentUser?.updateDisplayName(_username.text);
                   Navigator.pop(context);
                 },
-                child: Text("Save Profile"),
+                child: Text(
+                  "Save Profile",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             )
           ],

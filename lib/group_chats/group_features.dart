@@ -337,6 +337,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                               ),
                               Text(
                                 "Payment History",
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontFamily: 'JosefinSans',

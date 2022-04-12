@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../utils/constants.dart';
+
 class QRScanner extends StatefulWidget {
 
   @override
@@ -47,19 +49,27 @@ class _QRScannerState extends State<QRScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          }, icon: Icon(Icons.arrow_back),
+        automaticallyImplyLeading: false,
+        backgroundColor: Palette.primaryColor,
+        title: Stack(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                size: 23.5,
+                color: Colors.white,
+              ),
+            ),
+            Center(
+                child: Text(
+                    "QR Scanner"
+                )
+            ),
+          ],
         ),
-        leadingWidth: 60,
-        title: Center(child: Text("QR Scanner")),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.settings_ethernet),
-          )
-        ],
       ),
       body: Stack(
         alignment: Alignment.center,
