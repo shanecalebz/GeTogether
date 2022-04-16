@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> checkBoxValue = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isLoading = true;
 
   void startTimer() {
     timer = Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
@@ -83,6 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
           checkBoxValue.add((sortedUserList.length - 1).toString() + ",false");
         }
       }
+
+      setState(() {
+        isLoading = false;
+      });
     }));
   }
 
@@ -348,7 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: isLoading ? Center(child: CircularProgressIndicator()) : TabBarView(
           children: [
             buildYouOwe(),
             buildTheyOwe(),
