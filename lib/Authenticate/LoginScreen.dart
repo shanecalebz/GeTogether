@@ -128,8 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
               setState(() {
                 isLoading = false;
               });
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => BottomNavScreen()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (BuildContext context) => BottomNavScreen()));
             } else {
               print("Login Failed");
               setState(() {

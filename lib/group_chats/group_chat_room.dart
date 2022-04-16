@@ -157,7 +157,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.blueAccent,
+                color: chatMap['uid'] == _auth.currentUser!.uid ? Colors.brown[400] : Colors.brown[600],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

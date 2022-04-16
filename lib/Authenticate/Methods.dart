@@ -57,7 +57,7 @@ Future logOut(BuildContext context) async {
 
   try {
     await _auth.signOut().then((value) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) => LoginScreen()));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false);
     });
   } catch (e) {
     print("error");
