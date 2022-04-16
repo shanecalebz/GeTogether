@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:getogether/utils/constants.dart';
 
 class AddMembersINGroup extends StatefulWidget {
   final String groupChatId, name;
@@ -39,15 +40,19 @@ class _AddMembersINGroupState extends State<AddMembersINGroup> {
         .where("email", isEqualTo: _search.text)
         .get()
         .then((value) {
-      setState(() {
-        userMap = value.docs[0].data();
-        isLoading = false;
-      });
-      print(userMap);
+          setState(() {
+            if (value.docs.isNotEmpty) {
+              userMap = value.docs[0].data();
+            }
+            isLoading = false;
+          });
     });
   }
 
   void onAddMembers() async {
+    userMap?.addAll({
+      "isAdmin": false,
+    });
     membersList.add(userMap);
 
     await _firestore.collection('groups').doc(widget.groupChatId).update({
@@ -60,6 +65,18 @@ class _AddMembersINGroupState extends State<AddMembersINGroup> {
         .collection('groups')
         .doc(widget.groupChatId)
         .set({"name": widget.name, "id": widget.groupChatId});
+
+    // SHOW SNACKBAR
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text(
+          "User Added",
+          style: TextStyle(
+            color: Colors.white,
+          )
+      ),
+      duration: Duration(seconds: 3),
+      backgroundColor: Color(0XFFFEA828),
+    ));
   }
 
   @override
@@ -69,6 +86,7 @@ class _AddMembersINGroupState extends State<AddMembersINGroup> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Members"),
+        backgroundColor: Palette.primaryColor,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -107,6 +125,7 @@ class _AddMembersINGroupState extends State<AddMembersINGroup> {
                   )
                 : ElevatedButton(
                     onPressed: onSearch,
+                    style: ElevatedButton.styleFrom(primary: Palette.primaryColor),
                     child: Text("Search"),
                   ),
             userMap != null

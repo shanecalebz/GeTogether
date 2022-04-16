@@ -67,7 +67,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
               children: [
                 Container(
                   width: (MediaQuery.of(context).size.width - 60.0) / 2,
-                  height: 150.0,
+                  height: (MediaQuery.of(context).size.height - 251.5) / 3,
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -108,7 +108,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                 ),
                 Container(
                   width: (MediaQuery.of(context).size.width - 60.0) / 2,
-                  height: 150.0,
+                  height: (MediaQuery.of(context).size.height - 251.5) / 3,
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -156,7 +156,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                 children: [
                   Container(
                     width: (MediaQuery.of(context).size.width - 60.0) / 2,
-                    height: 150.0,
+                    height: (MediaQuery.of(context).size.height - 251.5) / 3,
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -217,7 +217,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                   ),
                   Container(
                     width: (MediaQuery.of(context).size.width - 60.0) / 2,
-                    height: 150.0,
+                    height: (MediaQuery.of(context).size.height - 251.5) / 3,
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -269,7 +269,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                 children: [
                   Container(
                     width: (MediaQuery.of(context).size.width - 60.0) / 2,
-                    height: 150.0,
+                    height: (MediaQuery.of(context).size.height - 251.5) / 3,
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -310,7 +310,7 @@ class _GroupFeatureScreenState extends State<GroupFeatureScreen> {
                   ),
                   Container(
                     width: (MediaQuery.of(context).size.width - 60.0) / 2,
-                    height: 150.0,
+                    height: (MediaQuery.of(context).size.height - 251.5) / 3,
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),

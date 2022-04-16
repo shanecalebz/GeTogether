@@ -83,7 +83,10 @@ class _GroupInfoState extends State<GroupInfo> {
             builder: (context) {
               return AlertDialog(
                 content: ListTile(
-                  onTap: () => removeMembers(index),
+                  onTap: () {
+                    removeMembers(index);
+                    Navigator.of(context).pop();
+                  },
                   title: Text("Remove This Member"),
                 ),
               );
