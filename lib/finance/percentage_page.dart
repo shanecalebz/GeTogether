@@ -29,6 +29,7 @@ class _PercentageInputState extends State<PercentageInput> {
   List membersListFinal = [];
   bool isLoading = true;
   late Timer timer;
+  late bool negativeValueFound;
   bool snackBarShown = false;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -69,53 +70,94 @@ class _PercentageInputState extends State<PercentageInput> {
   double totalPercentage = 0;
 
   void checkPercentage() {
-    totalPercentage = 0;
-    for (int i = 0; i < percControllers.length; i++) {
-      totalPercentage += double.parse(percControllers[i].text);
-    }
 
-    // ENSURE USER INPUT DOES NOT EXCEED 100%
+    // CHECK NO NEGATIVE
+    negativeValueFound = false;
     for (int i = 0; i < percControllers.length; i++) {
-      if (double.parse(percControllers[i].text) > 100.00) {
-        if (snackBarShown == false) {
-          // SHOW SNACKBAR
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Icon(
-                    Icons.warning,
-                    size: 14.0,
-                    color: Colors.white,
-                  ),
-                ),
-                Text("Invalid Percentage",
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
-              ],
-            ),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.red,
-          ));
-          snackBarShown = true;
-          timer = Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
-            snackBarShown = false;
-            timer.cancel();
-          });
-        }
+      if (percControllers[i].text.contains("-")) {
+        negativeValueFound = true;
+        break;
       }
     }
 
-    // VALIDATE TOTAL PERCENTAGE
-    percentageValidated = false;
-    if (totalPercentage == 100.00 &&
-        double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
-      percentageValidated = true;
-    }
+    if (negativeValueFound == false) {
+      totalPercentage = 0;
+      for (int i = 0; i < percControllers.length; i++) {
+        totalPercentage += double.parse(percControllers[i].text);
+      }
 
-    setState(() {});
+      // ENSURE USER INPUT DOES NOT EXCEED 100%
+      for (int i = 0; i < percControllers.length; i++) {
+        if (double.parse(percControllers[i].text) > 100.00) {
+          if (snackBarShown == false) {
+            // SHOW SNACKBAR
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.warning,
+                      size: 14.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text("Invalid Percentage",
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
+                ],
+              ),
+              duration: Duration(seconds: 2),
+              backgroundColor: Colors.red,
+            ));
+            snackBarShown = true;
+            timer = Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
+              snackBarShown = false;
+              timer.cancel();
+            });
+          }
+        }
+      }
+
+      // VALIDATE TOTAL PERCENTAGE
+      percentageValidated = false;
+      if (totalPercentage == 100.00 &&
+          double.parse(double.parse(_billAmountController.text).toStringAsFixed(2)) > 0) {
+        percentageValidated = true;
+      }
+
+      setState(() {});
+    } else {
+      if (snackBarShown == false) {
+        // SHOW SNACKBAR
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.warning,
+                  size: 14.0,
+                  color: Colors.white,
+                ),
+              ),
+              Text("Percentage cannot be negative!",
+                  style: TextStyle(
+                    color: Colors.white,
+                  )),
+            ],
+          ),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ));
+        snackBarShown = true;
+        timer = Timer.periodic(const Duration(milliseconds: 2000), (Timer timer) {
+          snackBarShown = false;
+          timer.cancel();
+        }); 
+      }
+    }
   }
 
   List<TextEditingController> percControllers = [];
@@ -389,7 +431,7 @@ class _PercentageInputState extends State<PercentageInput> {
             // CREATE STRING
             String temp = "";
             for (int i = 0; i < membersListFinal.length; i++) {
-              if (double.parse((_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2)) > 0.00) {
+              if (double.parse((_billAmount * (double.parse(percControllers[i].text)) / 100).toStringAsFixed(2)) >= 0.00) {
                 if (_auth.currentUser!.uid == membersListFinal[i]['uid']) {
                   // OWNER
                   temp += membersListFinal[i]['uid'] + "," + membersListFinal[i]['name'] + ",0.00,no,yes;";
@@ -422,7 +464,7 @@ class _PercentageInputState extends State<PercentageInput> {
                     color: Colors.white,
                   )),
               duration: Duration(seconds: 3),
-              backgroundColor: Color(0XFFFEA828),
+              backgroundColor: Colors.red,
             ));
           }
         },

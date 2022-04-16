@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
               ),
               duration: Duration(seconds: 3),
-              backgroundColor: Color(0XFFFEA828),
+              backgroundColor: Colors.green,
             ));
 
             // SET CHECKBOX VALUE TO TRUE

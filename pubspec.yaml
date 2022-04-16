@@ -48,6 +48,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   flutter_svg: ^1.0.3
   confetti: ^0.6.0
+  animations: ^2.0.2
 
 dev_dependencies:
   flutter_test:

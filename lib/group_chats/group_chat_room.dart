@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 import '../utils/constants.dart';
 import 'group_info.dart';
 import 'package:intl/intl.dart';
+import 'package:animations/animations.dart';
 
 class GroupChatRoom extends StatefulWidget {
 
@@ -34,57 +35,34 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
   List<String> userUIDList = [];
 
   Future getImage() async {
-    ImagePicker _picker = ImagePicker();
-
-    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
-      if (xFile != null) {
-        imageFile = File(xFile.path);
-        uploadImage();
-      }
-    });
+    ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      uploadImage(image);
+    }
   }
 
-  Future uploadImage() async {
-    String fileName = Uuid().v1();
-    int status = 1;
+  Future uploadImage(image) async {
 
-    await _firestore
-        .collection('groups')
-        .doc(widget.groupChatId)
-        .collection('chats').doc(fileName).set({
-      "sendby": _auth.currentUser!.displayName,
-      "message": "",
-      "type": "img",
-      "uid": _auth.currentUser!.uid,
-      "time": DateTime.now().millisecondsSinceEpoch,
-    });
-
-    var ref =
-    FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
-
-    var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
+    // ADD TO FIREBASE STORAGE
+    String tempURL;
+    Reference storageReference = FirebaseStorage.instance.ref().child('images/' + DateTime.now().millisecondsSinceEpoch.toString());
+    UploadTask uploadTask = storageReference.putFile(File(image.path));
+    uploadTask.then((res) async {
+      tempURL = await res.ref.getDownloadURL();
       await _firestore
           .collection('groups')
           .doc(widget.groupChatId)
-          .collection('chats')
-          .doc(fileName)
-          .delete();
-
-      status = 0;
+          .collection('chats').add({
+        "sendBy": _auth.currentUser!.uid,
+        "message": "",
+        "type": "img",
+        "imageURL": tempURL,
+        "uid": _auth.currentUser!.uid,
+        "time": DateTime.now().millisecondsSinceEpoch,
+      });
+      scrollToEnd();
     });
-
-    if (status == 1) {
-      String imageUrl = await uploadTask.ref.getDownloadURL();
-
-      await _firestore
-          .collection('groups')
-          .doc(widget.groupChatId)
-          .collection('chats')
-          .doc(fileName)
-          .update({"message": imageUrl});
-
-      print(imageUrl);
-    }
   }
 
   void onSendMessage() async {
@@ -147,8 +125,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
   Widget messageTile(Size size, Map<String, dynamic> chatMap, BuildContext context) {
     return Builder(builder: (_) {
       if (chatMap['type'] == "text") {
-        if (chatMap['type'] == "text") {
-          return Align(
+        return Align(
           alignment: chatMap['uid'] == _auth.currentUser!.uid ? Alignment.centerRight : Alignment.centerLeft,
           child: Padding(
             padding:  chatMap['uid'] == _auth.currentUser!.uid ? EdgeInsets.only(left: MediaQuery.of(context).size.width / 2) : EdgeInsets.only(right: MediaQuery.of(context).size.width / 2),
@@ -168,8 +145,8 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                   Text(
                     chatMap['message'],
                     style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
+                      fontSize: 16,
+                      color: Colors.white,
                     ),
                   ),
                   SizedBox(height: size.height / 200),
@@ -185,40 +162,92 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
             ),
           ),
         );
-        } else {
-          return Container(
-          height: size.height / 2.5,
-          width: size.width,
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          alignment: chatMap['uid'] == _auth.currentUser!.uid
-              ? Alignment.centerRight
-              : Alignment.centerLeft,
-          child: InkWell(
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => ShowImage(
-                  imageUrl: chatMap['message'],
-                ),
-              ),
-            ),
-
-          ),
-        );
-        }
       } else if (chatMap['type'] == "img") {
-        return Container(
-          width: size.width,
-          alignment: chatMap['uid'] == _auth.currentUser!.uid
-              ? Alignment.centerRight
-              : Alignment.centerLeft,
-          child: Container(
-            height: size.height / 2.5,
-            width: size.width / 2,
-            decoration: BoxDecoration(border: Border.all()),
-            alignment: chatMap['message'] != "" ? null : Alignment.center,
-            child: Image.network(
-              chatMap['message'],
-              fit: BoxFit.cover,
+        return Align(
+          alignment: chatMap['uid'] == _auth.currentUser!.uid ? Alignment.centerRight : Alignment.centerLeft,
+          child: Padding(
+            padding:  chatMap['uid'] == _auth.currentUser!.uid ? EdgeInsets.only(left: MediaQuery.of(context).size.width / 2) : EdgeInsets.only(right: MediaQuery.of(context).size.width / 2),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: chatMap['uid'] == _auth.currentUser!.uid ? Colors.grey[500] : Colors.grey[700],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: chatMap['uid'] == _auth.currentUser!.uid ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                children: [
+                  chatMap['uid'] == _auth.currentUser!.uid ? Container(width: 0.0) : printText(chatMap['uid']),
+                  chatMap['uid'] == _auth.currentUser!.uid ? Container(width: 0.0, height: 5.0) : Padding(
+                    padding: const EdgeInsets.only(bottom: 5.0),
+                    child: SizedBox(height: size.height / 200),
+                  ),
+                  OpenContainer(
+                    openBuilder: (BuildContext context, void Function({Object? returnValue}) action) {
+                      return Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Dismissible(
+                                    direction: DismissDirection.vertical,
+                                    key: UniqueKey(),
+                                    onDismissed: (_) => Navigator.of(context).pop(),
+                                    child: Image.network(
+                                      chatMap['imageURL'],
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 70.0, left: 15.0),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Icon(
+                                Icons.close,
+                                size: 35.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    closedBuilder: (BuildContext context, void Function() action) {
+                      return Container(
+                        color: chatMap['uid'] == _auth.currentUser!.uid ? Colors.grey[500] : Colors.grey[700],
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: Image.network(
+                            chatMap['imageURL'],
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: SizedBox(height: size.height / 200),
+                  ),
+                  Text(
+                    DateFormat("dd MMM - HH:mm").format(DateTime.fromMillisecondsSinceEpoch(int.parse(chatMap['time'].toString()))),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[100],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

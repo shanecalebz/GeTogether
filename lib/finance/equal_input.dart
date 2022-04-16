@@ -320,7 +320,7 @@ class _EqualInputState extends State<EqualInput> {
                     color: Colors.white,
                   )),
               duration: Duration(seconds: 3),
-              backgroundColor: Color(0XFFFEA828),
+              backgroundColor: Colors.red,
             ));
           } else {
             for (int i = 0; i < membersList.length; i++) {
