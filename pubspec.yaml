@@ -42,11 +42,12 @@ dependencies:
   uuid: ^3.0.4
   flutter_fortune_wheel: ^1.2.0
   google_place: ^0.4.7
-  location: ^4.2.0
+  location: ^4.3.0
   flutter_rating_bar: ^4.0.0
   qr_code_scanner: ^0.7.0
   sliding_up_panel: ^2.0.0+1
   flutter_svg: ^1.0.3
+  confetti: ^0.6.0
 
 dev_dependencies:
   flutter_test:

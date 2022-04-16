@@ -437,7 +437,7 @@ class _SuggestionsState extends State<Suggestions> {
                   if (count == 0) {
                     tempString += result.results[i].name;
                   } else {
-                    tempString += "," + result.results[i].name;
+                    tempString += "/" + result.results[i].name;
                   }
                   count++;
                 }

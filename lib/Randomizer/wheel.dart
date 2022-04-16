@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:getogether/Randomizer/suggestions.dart';
-
+import 'package:confetti/confetti.dart';
 import '../utils/constants.dart';
 
 class Wheel extends StatefulWidget {
@@ -21,10 +21,14 @@ class Wheel extends StatefulWidget {
 }
 
 class _WheelState extends State<Wheel> {
+  late ConfettiController _controllerCenterRight;
+  late ConfettiController _controllerCenterLeft;
   TextEditingController textEditingController = new TextEditingController();
   StreamController<int> controller = StreamController<int>();
   List<String> userInput = [];
+  bool showTextInput = true;
   double selectedTextOpacity = 0.0;
+  double fortuneWheelOpacity = 1.0;
   late int count;
   var itemIndex = 0;
 
@@ -41,7 +45,7 @@ class _WheelState extends State<Wheel> {
                 alignment: Alignment.topCenter,
                 // <-- changing the position of the indicator
                 child: TriangleIndicator(
-                  color: Colors.blue
+                  color: Colors.orange
                       as Color, // <-- changing the color of the indicator
                 ),
               ),
@@ -58,16 +62,16 @@ class _WheelState extends State<Wheel> {
                     child: Text(
                       widget.categoryList[widget.categoryIndex].split(',')[i],
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontSize: 19.0,
                         fontFamily: 'JosefinSans',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     style: FortuneItemStyle(
-                      color: Colors.white,
+                      color: ((i % 2) == 0) ? Colors.grey[800] as Color : Colors.grey[600] as Color,
                       borderColor: Colors.black,
-                      borderWidth: 1, // <-- custom circle slice stroke width
+                      borderWidth: 0,
                     ),
                   )
             ],
@@ -76,7 +80,7 @@ class _WheelState extends State<Wheel> {
       );
     } else if (widget.categoryIndex == (widget.categoryList.length - 1)) {
       userInput.clear();
-      for (String input in textEditingController.text.split(',')) {
+      for (String input in textEditingController.text.split('/')) {
         userInput.add(input);
       }
       while (userInput.length < 2) {
@@ -92,7 +96,7 @@ class _WheelState extends State<Wheel> {
               FortuneIndicator(
                 alignment: Alignment.topCenter,
                 child: TriangleIndicator(
-                  color: Colors.blue as Color,
+                  color: Colors.orange as Color,
                 ),
               ),
             ],
@@ -103,15 +107,15 @@ class _WheelState extends State<Wheel> {
                     userInput[i],
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 20.0,
+                      fontSize: 19.0,
                       fontFamily: 'JosefinSans',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   style: FortuneItemStyle(
-                    color: Colors.white,
+                    color: ((i % 2) == 0) ? Colors.grey[800] as Color : Colors.grey[600] as Color,
                     borderColor: Colors.black,
-                    borderWidth: 1, // <-- custom circle slice stroke width
+                    borderWidth: 0,
                   ),
                 )
             ],
@@ -124,7 +128,7 @@ class _WheelState extends State<Wheel> {
   }
 
   Widget buildTextInput() {
-    if (widget.categoryIndex == (widget.categoryList.length - 1)) {
+    if (widget.categoryIndex == (widget.categoryList.length - 1) && showTextInput == true) {
       return Padding(
         padding: EdgeInsets.only(bottom: 30.0),
         child: Container(
@@ -173,12 +177,16 @@ class _WheelState extends State<Wheel> {
     textEditingController.addListener(() {
       setState(() {});
     });
+    _controllerCenterRight = ConfettiController(duration: const Duration(seconds: 1));
+    _controllerCenterLeft = ConfettiController(duration: const Duration(seconds: 1));
     super.initState();
   }
 
   @override
   void dispose() {
     textEditingController.removeListener(() {});
+    _controllerCenterRight.dispose();
+    _controllerCenterLeft.dispose();
     super.dispose();
   }
 
@@ -256,58 +264,130 @@ class _WheelState extends State<Wheel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildFortuneWheel(),
-          Padding(
-            padding: EdgeInsets.only(bottom: 30.0),
-            child: Center(
-              child: AnimatedOpacity(
-                  opacity: selectedTextOpacity,
-                  duration: Duration(milliseconds: 250),
-                  child: Column(
-                    children: [
-                      if (widget.categoryIndex ==
-                          (widget.categoryList.length - 1))
-                        Column(
-                          children: [
-                            Text("You got",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'JosefinSans',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15.0,
-                                )),
-                            Text(userInput[itemIndex],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0,
-                                  fontFamily: 'JosefinSans',
-                                  fontWeight: FontWeight.bold,
-                                ))
-                          ],
-                        )
-                      else
-                        Column(
-                          children: [
-                            Text("You got",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'JosefinSans',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15.0,
-                                )),
-                            Text(
-                                widget.categoryList[widget.categoryIndex]
-                                    .split(',')[itemIndex + 1],
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0,
-                                  fontFamily: 'JosefinSans',
-                                  fontWeight: FontWeight.bold,
-                                ))
-                          ],
-                        )
-                    ],
-                  )),
+          Expanded(
+            child: Stack(
+              children: [
+                ConfettiWidget(
+                  confettiController: _controllerCenterLeft,
+                  blastDirection: 0, // radial value - RIGHT
+                  emissionFrequency: 0.6,
+                  minimumSize: const Size(10, 10), // set the minimum potential size for the confetti (width, height)
+                  maximumSize: const Size(30, 30), // set the maximum potential size for the confetti (width, height)
+                  numberOfParticles: 3,
+                  gravity: 0.6,
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: ConfettiWidget(
+                    confettiController: _controllerCenterRight,
+                    blastDirection: -3.142, // radial value - RIGHT
+                    emissionFrequency: 0.6,
+                    minimumSize: const Size(10, 10), // set the minimum potential size for the confetti (width, height)
+                    maximumSize: const Size(30, 30), // set the maximum potential size for the confetti (width, height)
+                    numberOfParticles: 3,
+                    gravity: 0.6,
+                  ),
+                ),
+                AnimatedOpacity(
+                    opacity: fortuneWheelOpacity,
+                    duration: Duration(milliseconds: 250),
+                    child: buildFortuneWheel()
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedOpacity(
+                            opacity: selectedTextOpacity,
+                            duration: Duration(milliseconds: 250),
+                            child: Column(
+                              children: [
+                                if (widget.categoryIndex == (widget.categoryList.length - 1))
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(bottom: 10.0),
+                                          child: Text("You got",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: 'JosefinSans',
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20.0,
+                                              )),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                                                child: Text(userInput[itemIndex],
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      decoration: TextDecoration.underline,
+                                                      color: Colors.black,
+                                                      fontSize: 40.0,
+                                                      fontFamily: 'JosefinSans',
+                                                      fontWeight: FontWeight.bold,
+                                                    )),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                else
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(bottom: 10.0),
+                                          child: Text("You got",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: 'JosefinSans',
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20.0,
+                                              )),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                                                child: Text(
+                                                    widget.categoryList[widget.categoryIndex]
+                                                        .split(',')[itemIndex + 1],
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      decoration: TextDecoration.underline,
+                                                      color: Colors.black,
+                                                      fontSize: 40.0,
+                                                      fontFamily: 'JosefinSans',
+                                                      fontWeight: FontWeight.bold,
+                                                    )),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Padding(
@@ -319,31 +399,34 @@ class _WheelState extends State<Wheel> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  if (widget.categoryIndex ==
-                      (widget.categoryList.length - 1)) {
-                    itemIndex = Fortune.randomInt(0, userInput.length);
-                    controller.add(itemIndex);
-                  } else {
-                    itemIndex = Fortune.randomInt(
-                        0,
-                        widget.categoryList[widget.categoryIndex]
-                                .split(',')
-                                .length -
-                            1);
-                    controller.add(itemIndex);
-                  }
-
-                  // DISPLAY
-                  Future.delayed(const Duration(milliseconds: 4500), () {
+                  if (fortuneWheelOpacity == 1.0) {
                     setState(() {
-                      selectedTextOpacity = 1.0;
-                      Future.delayed(const Duration(milliseconds: 2000), () {
-                        setState(() {
-                          selectedTextOpacity = 0.0;
-                        });
+                      showTextInput = false;
+                    });
+                    if (widget.categoryIndex == (widget.categoryList.length - 1)) {
+                      itemIndex = Fortune.randomInt(0, userInput.length);
+                      controller.add(itemIndex);
+                    } else {
+                      itemIndex = Fortune.randomInt(0, widget.categoryList[widget.categoryIndex].split(',').length - 1);
+                      controller.add(itemIndex);
+                    }
+
+                    // DISPLAY
+                    Future.delayed(const Duration(milliseconds: 4500), () {
+                      setState(() {
+                        fortuneWheelOpacity = 0.0;
+                        selectedTextOpacity = 1.0;
+                        _controllerCenterLeft.play();
+                        _controllerCenterRight.play();
                       });
                     });
-                  });
+                  } else {
+                    setState(() {
+                      fortuneWheelOpacity = 1.0;
+                      selectedTextOpacity = 0.0;
+                      showTextInput = true;
+                    });
+                  }
                 },
                 borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 child: Container(
@@ -353,7 +436,7 @@ class _WheelState extends State<Wheel> {
                   child: Padding(
                     padding: EdgeInsets.all(15.0),
                     child: Text(
-                      "SPIN",
+                      fortuneWheelOpacity == 1.0 ? "SPIN" : "CLOSE",
                       style: TextStyle(
                         fontSize: 20.0,
                         fontFamily: 'JosefinSans',

@@ -19,16 +19,16 @@ class _CategoriesState extends State<Categories> {
   // FOLLOWING ITEMS ARE THE SUB ITEMS FOR THAT CATEGORY
   List<String> eatCategories = [
     "Fast Food,MacDonalds,KFC,Pizza Hut,Long John Silver,Subway,Popeyes,Burger King,Mos Burger,Jollibee,Texas Chicken",
-    "Casual Dining,Swensens,Itacho Sushi,Astons,Fish & Co,Din Tai Fung,Crystal Jade Kitchen,Jacks Place,Hai Di Lao / Beauty in a Pot",
-    "Contemporary Casual,P.S. Cafe,Pasta Bar,Breadstreet,Birds of a Feather,Le La Vi,Monti,Odette,Candlenutt,Koma,The Summerhouse",
-    "Cafes,Starbucks,Coffebean & Tea Leaf,Lady M,Coffee Smith,Dal.komm,La Vie,Arabica",
+    "Expensive Dining,Swensens,Itacho Sushi,Astons,Fish & Co,Din Tai Fung,Crystal Jade,Jacks Place,Hai Di Lao,Beauty in a Pot",
+    "Simple Casual,P.S. Cafe,Pasta Bar,Breadstreet,Birds of a Feather,Le La Vi,Monti,Odette,Candlenutt,Koma,Summerhouse",
+    "Cafes,Starbucks,Coffeebean,Lady M,Coffee Smith,Dal.komm,La Vie,Arabica",
     "Others"
   ];
   List<String> doCategories = [
     "Sports,Basketball,Soccer,Badminton,Table Tennis,Beach Volleyball,Gym,Spin Class,Running",
-    "Gaming,Internet Cafe,Arcade,Playnation,Escape Room,Board Game Cafe,VR Station",
-    "Chill,Karaoke,Movie,Picnic,Pottery,Baking,Fishing / Prawning,Visiting & Museum",
-    "Recreational,Swimming,Pool / Snooker,Bowling,Darts,Mini-Golf,Night Cycling,Roller Blading,Amusement Park,Paintball,Laser-Tech",
+    "Gaming,Internet Cafe,Arcade,PlayNation,Escape Room,Board Game Cafe,VR Station",
+    "Chill,Karaoke,Movie,Picnic,Pottery,Baking,Fishing/Prawning,Visiting & Museum",
+    "Recreational,Swimming,Pool/Snooker,Bowling,Darts,Mini-Golf,Night Cycling,Roller Blading,Amusement Park,Paintball,Laser-Tech",
     "Others"
   ];
 
