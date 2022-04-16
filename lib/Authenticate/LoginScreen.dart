@@ -16,129 +16,176 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   bool isLoading = false;
+  bool wrongEntry = false;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: isLoading
-          ? Center(
-              child: Container(
+      body:Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              hexStringToColor("E65100"),
+              hexStringToColor("FB8C00"),
+              hexStringToColor("FFB74D"),
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
                 height: size.height / 20,
-                width: size.height / 20,
-                child: CircularProgressIndicator(),
               ),
-            )
-          : Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                hexStringToColor("E65100"),
-                hexStringToColor("FB8C00"),
-                hexStringToColor("FFB74D"),
-              ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: size.height / 20,
+              SizedBox(
+                height: size.height / 50,
+              ),
+              Container(
+                width: size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Center(
+                    child: Text(
+                      "GeTogether",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    SizedBox(
-                      height: size.height / 50,
-                    ),
-                    Container(
-                      width: size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Center(
-                          child: Text(
-                            "GeTogether",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: size.height / 10,
+              ),
+              Container(
+                width: size.width,
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: reusableTextField(
+                      "Enter Email", Icons.person_outline, false, _email),
+                ),
+              ),
+              Container(
+                width: size.width,
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: reusableTextField("Enter Password",
+                      Icons.lock_outline, true, _password),
+                ),
+              ),
+              AnimatedSize(
+                  duration: Duration(milliseconds: 250),
+                  curve: Curves.fastOutSlowIn,
+                  child: wrongEntry ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.info,
+                                    color: Colors.white,
+                                    size: 15.0,
+                                  ),
+                                ),
+                                Text(
+                                  "Wrong email / password",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: size.height / 10,
-                    ),
-                    Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: reusableTextField(
-                            "Enter Email", Icons.person_outline, false, _email),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: forgetPassword(context),
                       ),
-                    ),
-                    Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: reusableTextField("Enter Password",
-                            Icons.lock_outline, true, _password),
-                      ),
-                    ),
-                    forgetPassword(context),
-                    SizedBox(
-                      height: size.height / 10,
-                    ),
-                    customButton(size),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => CreateAccount())),
-                      child: Row(
-                          children: [
-                            const Text("Don't have account?",
-                                style: TextStyle(color: Colors.white70)),
-                            const Text(
-                              " Sign Up",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center),
-                    )
-                  ],
-                ),
+                    ],
+                  ) :
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: forgetPassword(context),
+                  )
               ),
-            ),
+              SizedBox(
+                height: size.height / 10,
+              ),
+              customButton(size),
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => CreateAccount())),
+                child: Row(
+                    children: [
+                      const Text("Don't have account?",
+                          style: TextStyle(color: Colors.white70)),
+                      const Text(
+                        " Sign Up",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget customButton(Size size) {
     return GestureDetector(
       onTap: () {
-        if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
+        if (isLoading == false) {
+
           setState(() {
-            isLoading = true;
+            wrongEntry = false;
           });
 
-          logIn(_email.text, _password.text).then((user) {
-            if (user != null) {
-              print("Login Successful");
-              setState(() {
-                isLoading = false;
-              });
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (BuildContext context) => BottomNavScreen()));
-            } else {
-              print("Login Failed");
-              setState(() {
-                isLoading = false;
-              });
-            }
-          });
-        } else {
-          print("Please fill form correctly");
+          if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
+            setState(() {
+              isLoading = true;
+            });
+
+            logIn(_email.text, _password.text).then((user) {
+              if (user != null) {
+                print("Login Successful");
+                setState(() {
+                  isLoading = false;
+                });
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (BuildContext context) => BottomNavScreen()));
+              } else {
+                print("Login Failed");
+                setState(() {
+                  isLoading = false;
+                  wrongEntry = true;
+                });
+              }
+            });
+          } else {
+            print("Please fill form correctly");
+          }
         }
       },
       child: Padding(
@@ -150,12 +197,21 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(90), color: Colors.white),
           alignment: Alignment.center,
-          child: Text(
-            "Log In",
-            style: const TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
+          child: AnimatedSize(
+            duration: Duration(milliseconds: 250),
+            curve: Curves.fastOutSlowIn,
+            child: isLoading ? SizedBox(
+                width: 25.0,
+                height: 25.0,
+                child: CircularProgressIndicator()
+            ) :
+            Text(
+              "Log In",
+              style: const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+            ),
           ),
         ),
       ),
@@ -184,7 +240,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
 Widget forgetPassword(BuildContext context) {
   return Container(
-    width: MediaQuery.of(context).size.width,
     height: 35,
     alignment: Alignment.bottomRight,
     child: TextButton(
