@@ -291,7 +291,11 @@ class _WheelState extends State<Wheel> {
                 AnimatedOpacity(
                     opacity: fortuneWheelOpacity,
                     duration: Duration(milliseconds: 250),
-                    child: buildFortuneWheel()
+                    child: Column(
+                      children: [
+                        buildFortuneWheel(),
+                      ],
+                    )
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
