@@ -157,7 +157,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
               margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: chatMap['uid'] == _auth.currentUser!.uid ? Colors.brown[400] : Colors.brown[600],
+                color: chatMap['uid'] == _auth.currentUser!.uid ? Colors.grey[500] : Colors.grey[700],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -169,7 +169,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                     chatMap['message'],
                     style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white
+                        color: Colors.white,
                     ),
                   ),
                   SizedBox(height: size.height / 200),
@@ -300,76 +300,79 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
         alignment: Alignment.center,
         child: CircularProgressIndicator(),
       ) :
-      Column(
-        children: [
-          Flexible(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore
-                  .collection('groups')
-                  .doc(widget.groupChatId)
-                  .collection('chats')
-                  .orderBy('time')
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    controller: scrollController,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      Map<String, dynamic> chatMap =
-                      snapshot.data!.docs[index].data()
-                      as Map<String, dynamic>;
+      Padding(
+        padding: EdgeInsets.only(top: 5.0),
+        child: Column(
+          children: [
+            Flexible(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _firestore
+                    .collection('groups')
+                    .doc(widget.groupChatId)
+                    .collection('chats')
+                    .orderBy('time')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      controller: scrollController,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> chatMap =
+                        snapshot.data!.docs[index].data()
+                        as Map<String, dynamic>;
 
-                      if (alreadyScrolled == false) {
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          scrollToEnd();
-                        });
-                        alreadyScrolled = true;
-                      }
+                        if (alreadyScrolled == false) {
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            scrollToEnd();
+                          });
+                          alreadyScrolled = true;
+                        }
 
-                      return messageTile(size, chatMap, context);
-                    },
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
-          ),
-          Container(
-            height: size.height / 10,
-            width: size.width,
-            alignment: Alignment.center,
-            child: Container(
-              height: size.height / 12,
-              width: size.width / 1.1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: size.height / 17,
-                    width: size.width / 1.3,
-                    child: TextField(
-                      controller: _message,
-                      decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            onPressed: () => getImage(),
-                            icon: Icon(Icons.photo),
-                          ),
-                          hintText: "Send Message",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          )),
-                    ),
-                  ),
-                  IconButton(
-                      icon: Icon(Icons.send), onPressed: onSendMessage),
-                ],
+                        return messageTile(size, chatMap, context);
+                      },
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
-          ),
-        ],
+            Container(
+              height: size.height / 10,
+              width: size.width,
+              alignment: Alignment.center,
+              child: Container(
+                height: size.height / 12,
+                width: size.width / 1.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: size.height / 17,
+                      width: size.width / 1.3,
+                      child: TextField(
+                        controller: _message,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () => getImage(),
+                              icon: Icon(Icons.photo),
+                            ),
+                            hintText: "Send Message",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            )),
+                      ),
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.send), onPressed: onSendMessage),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
