@@ -106,7 +106,7 @@ class _WheelState extends State<Wheel> {
                   child: Text(
                     userInput[i],
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 19.0,
                       fontFamily: 'JosefinSans',
                       fontWeight: FontWeight.bold,
